@@ -1,3 +1,4 @@
+using JobTracker.Api.Applications;
 using JobTracker.Api.Auth;
 using JobTracker.Domain.Identity;
 using JobTracker.Infrastructure.Persistence;
@@ -166,5 +167,7 @@ app.MapGet("/me", (ClaimsPrincipal principal) =>
 .RequireAuthorization()
 .WithName("Me")
 .WithOpenApi();
+
+app.MapApplicationEndpoints();
 
 app.Run();
