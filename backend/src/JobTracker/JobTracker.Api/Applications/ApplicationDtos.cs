@@ -8,7 +8,8 @@ public sealed record CreateJobApplicationRequest(
     ApplicationStatus Status,
     DateOnly? AppliedOn,
     string? SourceUrl,
-    string? Notes);
+    string? Notes
+);
 
 public sealed record UpdateJobApplicationRequest(
     string CompanyName,
@@ -16,7 +17,8 @@ public sealed record UpdateJobApplicationRequest(
     ApplicationStatus Status,
     DateOnly? AppliedOn,
     string? SourceUrl,
-    string? Notes);
+    string? Notes
+);
 
 public sealed record JobApplicationResponse(
     Guid Id,
@@ -27,4 +29,5 @@ public sealed record JobApplicationResponse(
     string? SourceUrl,
     string? Notes,
     DateTime CreatedAtUtc,
-    DateTime UpdatedAtUtc);
+    DateTime UpdatedAtUtc
+);
