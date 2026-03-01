@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { formatStatus, listApplications } from "../api/applications";
 import type { JobApplicationResponse } from "../api/applications";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../api/auth";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const nav = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -17,9 +20,18 @@ export function ApplicationsListPage() {
         })();
     }, []);
 
+    async function handleLogout() {
+        await logout();
+        nav("/login");
+    }
+
     return (
         <div style={{ maxWidth: 900, margin: "40px auto" }}>
-            <h1>Applications List</h1>
+
+            <div>
+                <h1>Applications List</h1>
+                <button onClick={handleLogout}>Logout</button>
+            </div>
 
             {error && <pre style={{ color: "crimson", whiteSpace: "pre-wrap" }}>{error}</pre>}
 
