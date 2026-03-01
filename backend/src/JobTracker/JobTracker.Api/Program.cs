@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -105,69 +103,7 @@ app.UseAuthentication(); // MUST come before Authorization ; validates JWT Token
 app.UseAuthorization(); // Checks if user has permission to access endpoints
 
 // ENDPOINTS
-
-// POST /auth/register ; REGISTER NEW USER
-app.MapPost("/auth/register", async (
-        RegisterRequest request,
-        UserManager<ApplicationUser> userManager) =>
-{
-    var user = new ApplicationUser
-    {
-        Id = Guid.NewGuid(),
-        UserName = request.Email,
-        Email = request.Email
-    };
-
-    var result = await userManager.CreateAsync(user, request.Password);
-    if (!result.Succeeded)
-    {
-        var errors = result.Errors.Select(e => new { e.Code, e.Description });
-        return Results.BadRequest(new { message = "Registration failed", errors });
-    }
-
-    return Results.Created($"/users/{user.Id}", new { userId = user.Id, email = user.Email });
-})
-.WithName("Register")
-.WithOpenApi();
-
-
-app.MapPost("/auth/login", async (
-        LoginRequest request,
-        UserManager<ApplicationUser> userManager,
-        JwtTokenService tokenService) =>
-{
-    var user = await userManager.FindByEmailAsync(request.Email);
-    if (user is null)
-        return Results.Unauthorized();
-
-    var ok = await userManager.CheckPasswordAsync(user, request.Password);
-    if (!ok)
-        return Results.Unauthorized();
-
-    var token = tokenService.CreateAccessToken(user);
-    return Results.Ok(new AuthorizationResponse(token));
-})
-.WithName("Login")
-.WithOpenApi();
-
-app.MapGet("/me", (ClaimsPrincipal principal) =>
-{
-    var sub = principal.FindFirstValue(JwtRegisteredClaimNames.Sub)
-              ?? principal.FindFirstValue(ClaimTypes.NameIdentifier);
-
-    var email = principal.FindFirstValue(JwtRegisteredClaimNames.Email)
-                ?? principal.FindFirstValue(ClaimTypes.Email)
-                ?? string.Empty;
-
-    if (!Guid.TryParse(sub, out var userId))
-        return Results.Unauthorized();
-
-    return Results.Ok(new MeResponse(userId, email));
-})
-.RequireAuthorization()
-.WithName("Me")
-.WithOpenApi();
-
+app.MapAuthEndpoints();
 app.MapApplicationEndpoints();
 
 app.Run();
