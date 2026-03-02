@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import { formatStatus, listApplications } from "../api/applications";
-import type { JobApplicationResponse } from "../api/applications";
+import { createApplication, formatStatus, listApplications } from "../api/applications";
+import type { CreateJobApplicationRequest, JobApplicationResponse } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
 import '../styles/applicationList.css';
+import { CreateApplicationModal } from "./CreateApplicationModal";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -26,12 +28,21 @@ export function ApplicationsListPage() {
         nav("/login");
     }
 
+    async function handleCreate(request: CreateJobApplicationRequest) {
+        const created = await createApplication(request);
+        setApps((prev) => [...prev, created]);
+        setShowModal(false);
+    }
+
     return (
         <div className="page-container">
 
             <div className="page-header">
                 <h1>Applications List</h1>
-                <button onClick={handleLogout}>Logout</button>
+                <div>
+                    <button onClick={() => setShowModal(true)}>+ Add</button>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
             </div>
 
             {error && <pre className="error">{error}</pre>}
@@ -56,6 +67,10 @@ export function ApplicationsListPage() {
                     ))}
                 </tbody>
             </table>
+
+            { showModal && (
+                <CreateApplicationModal onSubmit={handleCreate} onClose={() => setShowModal(false)} />
+            )}
 
             {apps.length === 0 && !error && <p>No applications yet.</p>}
         </div>

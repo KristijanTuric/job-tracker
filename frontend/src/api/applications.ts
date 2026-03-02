@@ -27,6 +27,32 @@ export type JobApplicationResponse = {
     updatedAtUtc: string;
 };
 
+export type CreateJobApplicationRequest = {
+    companyName: string;
+    position: string;
+    status: number;
+    appliedOn: string | null;
+    sourceUrl: string | null;
+    notes: string | null;
+}
+
+export type UpdateJobApplicationRequest = {
+    companyName: string;
+    position: string;
+    status: number;
+    appliedOn: string | null;
+    sourceUrl: string | null;
+    notes: string | null;
+}
+
 export async function listApplications(): Promise<JobApplicationResponse[]> {
     return ( await apiFetch("/api/applications")) as JobApplicationResponse[];
+}
+
+export async function createApplication(request: CreateJobApplicationRequest): Promise<JobApplicationResponse> {
+    return (await apiFetch("/api/applications", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(request),
+    })) as JobApplicationResponse;
 }
