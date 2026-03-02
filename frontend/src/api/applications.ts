@@ -57,6 +57,14 @@ export async function createApplication(request: CreateJobApplicationRequest): P
     })) as JobApplicationResponse;
 }
 
+export async function updateApplication(id: string, request: UpdateJobApplicationRequest): Promise<JobApplicationResponse> {
+    return (await apiFetch(`/api/applications/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+    })) as JobApplicationResponse;
+}
+
 export async function deleteApplication(id: string): Promise<void> {
     return (await apiFetch(`/api/applications/${id}`, {
         method: "DELETE",

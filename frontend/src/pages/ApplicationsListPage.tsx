@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { createApplication, deleteApplication, formatStatus, listApplications } from "../api/applications";
-import type { CreateJobApplicationRequest, JobApplicationResponse } from "../api/applications";
+import { createApplication, deleteApplication, formatStatus, listApplications, updateApplication } from "../api/applications";
+import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobApplicationRequest } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
 import '../styles/applicationList.css';
 import { CreateApplicationModal } from "./CreateApplicationModal";
 import { DeleteApplicationModal } from "./DeleteApplicationModal";
+import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
+    const [updateId, setUpdateId] = useState<string | null>(null);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -41,6 +43,13 @@ export function ApplicationsListPage() {
         await deleteApplication(deleteId);
         setApps((prev) => prev.filter((a) => a.id !== deleteId));
         setDeleteId(null);
+    }
+
+    async function handleUpdate(request: UpdateJobApplicationRequest) {
+        if (!updateId) return;
+        const updated = await updateApplication(updateId, request);
+        setApps((prev) => prev.map((a) => a.id === updateId ? updated : a));
+        setUpdateId(null);
     }
 
     return (
@@ -73,8 +82,8 @@ export function ApplicationsListPage() {
                             <td>{a.companyName}</td>
                             <td>{a.position}</td>
                             <td>{formatStatus(a.status)}</td>
-                            <td>{new Date(a.updatedAtUtc).toLocaleString()}</td>
-                            <td><button>Edit</button></td>
+                            <td>{new Date(a.updatedAtUtc).toLocaleString("en-GB")}</td>
+                            <td><button onClick={() => setUpdateId(a.id)}>Edit</button></td>
                             <td><button onClick={() => setDeleteId(a.id)}>Delete</button></td>
                         </tr>
                     ))}
@@ -87,6 +96,10 @@ export function ApplicationsListPage() {
 
             { deleteId && (
                 <DeleteApplicationModal onConfirm={handleDelete} onClose={() => setDeleteId(null)} />
+            )}
+
+            { updateId && (
+                <UpdateApplicationModal application={apps.find((a) => a.id === updateId)!} onSubmit={handleUpdate} onClose={() => setUpdateId(null)} />
             )}
 
             {apps.length === 0 && !error && <p>No applications yet.</p>}

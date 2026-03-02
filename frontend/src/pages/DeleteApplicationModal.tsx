@@ -1,4 +1,3 @@
-import { useState } from "react";
 import '../styles/modal.css';
 
 type Props = {
@@ -7,7 +6,6 @@ type Props = {
 };
 
 export function DeleteApplicationModal({ onConfirm, onClose }: Props) {
-    const [error, setError] = useState<string | null>(null);
 
     return (
         <div className="modal-overlay" onClick={onClose}>
@@ -17,8 +15,6 @@ export function DeleteApplicationModal({ onConfirm, onClose }: Props) {
                     <button type="button" onClick={onConfirm}>Yes</button>
                     <button type="button" onClick={onClose}>No</button>
                 </div>
-
-                {error && <pre className="error">{error}</pre>}
             </div>
         </div>
     )
