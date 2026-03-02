@@ -3,6 +3,7 @@ import { formatStatus, listApplications } from "../api/applications";
 import type { JobApplicationResponse } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
+import '../styles/applicationList.css';
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
@@ -26,16 +27,16 @@ export function ApplicationsListPage() {
     }
 
     return (
-        <div style={{ maxWidth: 900, margin: "40px auto" }}>
+        <div className="page-container">
 
-            <div>
+            <div className="page-header">
                 <h1>Applications List</h1>
                 <button onClick={handleLogout}>Logout</button>
             </div>
 
-            {error && <pre style={{ color: "crimson", whiteSpace: "pre-wrap" }}>{error}</pre>}
+            {error && <pre className="error">{error}</pre>}
 
-            <table width="100%" cellPadding={8}>
+            <table className="applications-table">
                 <thead>
                     <tr>
                         <th align="left">Company</th>

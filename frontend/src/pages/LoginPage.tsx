@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth.ts";
+import '../styles/login.css';
 
 export function LoginPage() {
     const nav = useNavigate();
@@ -21,20 +22,20 @@ export function LoginPage() {
     }
 
     return (
-        <div style={{ maxWidth: 420, margin: "40px auto" }}>
+        <div className="page-container">
             <h1>Login</h1>
-            <form onSubmit={onSubmit}>
-                <label htmlFor="">
+            <form className="login-form" onSubmit={onSubmit}>
+                <label>
                     Email
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} style={{ width: "100%" }} />
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
                 </label>
-                <label htmlFor="">
+                <label>
                     Password
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: "100%" }} />
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"/>
                 </label>
                 <button type="submit">Login</button>
             </form>
-            {error && <pre style={{ color: "crimson", whiteSpace: "pre-wrap" }}>{error}</pre>}
+            {error && <pre className="error">{error}</pre>}
         </div>
     );
 }
