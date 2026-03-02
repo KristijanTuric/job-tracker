@@ -28,6 +28,12 @@ export async function apiFetch(input: string, init: RequestInit = {}) {
 
     if (!res.ok) {
         const text = await res.text();
+
+        if (res.status == 401) {
+            clearAccessToken();
+            throw new Error("Unauthorized");
+        }
+
         throw new Error(text || `HTTP ${res.status}`);
     }
 

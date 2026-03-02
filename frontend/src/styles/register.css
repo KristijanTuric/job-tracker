@@ -1,0 +1,17 @@
+.page-container {
+    max-width: 420;
+    margin: 40px auto;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+}
+
+.register-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

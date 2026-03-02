@@ -16,7 +16,8 @@ public static class AuthEndpoints
         // POST /auth/register ; REGISTER NEW USER
         group.MapPost("/register", async (
                 RegisterRequest request,
-                UserManager<ApplicationUser> userManager) =>
+                UserManager<ApplicationUser> userManager,
+                JwtTokenService tokenService) =>
         {
             var user = new ApplicationUser
             {
@@ -25,6 +26,7 @@ public static class AuthEndpoints
                 Email = request.Email,
             };
 
+            // UserManager.CreateAsync checks for duplicate users
             var result = await userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
             {
@@ -32,7 +34,8 @@ public static class AuthEndpoints
                 return Results.BadRequest(new { message = "Registration failed", errors });
             }
 
-            return Results.Created($"/users/{user.Id}", new { userId = user.Id, email = user.Email });
+            var token = tokenService.CreateAccessToken(user);
+            return Results.Ok(new AuthorizationResponse(token));
         }).WithName("Register");
 
         // POST /auth/login ; LOGIN USER

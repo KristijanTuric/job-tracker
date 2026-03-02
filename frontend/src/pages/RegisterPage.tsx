@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api/auth.ts";
-import '../styles/login.css';
+import { register } from "../api/auth";
+import '../styles/register.css';
 
-export function LoginPage() {
+export function RegisterPage() {
     const nav = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,17 +14,17 @@ export function LoginPage() {
         setError(null);
 
         try {
-            await login({email, password});
+            await register({email, password});
             nav("/applications");
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Login failed");
+            setError(err instanceof Error ? err.message : "Register failed");
         }
     }
 
     return (
         <div className="page-container">
-            <h1>Login</h1>
-            <form className="login-form" onSubmit={onSubmit}>
+            <h1>Register</h1>
+            <form onSubmit={onSubmit} className="register-form">
                 <label>
                     Email
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
@@ -33,15 +33,16 @@ export function LoginPage() {
                     Password
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"/>
                 </label>
-                <button type="submit">Login</button>
+                <button type="submit">Register</button>
             </form>
 
             <div>
                 <p>
-                    Don't have an account? <Link to="/register">Register</Link>
+                    Have an account? <Link to="/login">Login</Link>
                 </p>
             </div>
+
             {error && <pre className="error">{error}</pre>}
         </div>
-    );
+    )
 }
