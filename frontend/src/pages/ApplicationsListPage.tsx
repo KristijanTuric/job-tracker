@@ -7,6 +7,7 @@ import '../styles/applicationList.css';
 import { CreateApplicationModal } from "./CreateApplicationModal";
 import { DeleteApplicationModal } from "./DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
+import { DetailApplicationModal } from "./modals/DetailApplicationModal";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
@@ -14,6 +15,7 @@ export function ApplicationsListPage() {
     const [showModal, setShowModal] = useState(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [updateId, setUpdateId] = useState<string | null>(null);
+    const [detailId, setDetailId] = useState<string | null>(null);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -78,13 +80,13 @@ export function ApplicationsListPage() {
                 </thead>
                 <tbody>
                     {apps.map((a) => (
-                        <tr key={a.id}>
+                        <tr key={a.id} onClick={() => setDetailId(a.id)}>
                             <td>{a.companyName}</td>
                             <td>{a.position}</td>
                             <td>{formatStatus(a.status)}</td>
                             <td>{new Date(a.updatedAtUtc).toLocaleString("en-GB")}</td>
-                            <td><button onClick={() => setUpdateId(a.id)}>Edit</button></td>
-                            <td><button onClick={() => setDeleteId(a.id)}>Delete</button></td>
+                            <td><button onClick={(e) => { e.stopPropagation(); setUpdateId(a.id); }}>Edit</button></td>
+                            <td><button onClick={(e) => { e.stopPropagation(); setDeleteId(a.id); }}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
@@ -100,6 +102,10 @@ export function ApplicationsListPage() {
 
             { updateId && (
                 <UpdateApplicationModal application={apps.find((a) => a.id === updateId)!} onSubmit={handleUpdate} onClose={() => setUpdateId(null)} />
+            )}
+
+            { detailId && (
+                <DetailApplicationModal application={apps.find((a) => a.id === detailId)!} onClose={() => setDetailId(null)} />
             )}
 
             {apps.length === 0 && !error && <p>No applications yet.</p>}

@@ -39,3 +39,24 @@
     gap: 8px;
     margin-top: 8px;
 }
+
+.detail-position {
+    color: gray;
+    margin-top: 0;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px 16px;
+    margin: 16px 0;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #555;
+}
+
+.detail-notes {
+    white-space: pre-wrap;
+}

@@ -19,3 +19,11 @@
     padding: 8px;
     text-align: left;
 }
+
+.applications-table tbody tr {
+    cursor: pointer;
+}
+
+.applications-table tbody tr:hover {
+    background-color: rgb(240, 252, 255);
+}
