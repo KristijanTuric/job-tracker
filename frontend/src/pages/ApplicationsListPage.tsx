@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { createApplication, formatStatus, listApplications } from "../api/applications";
+import { createApplication, deleteApplication, formatStatus, listApplications } from "../api/applications";
 import type { CreateJobApplicationRequest, JobApplicationResponse } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
 import '../styles/applicationList.css';
 import { CreateApplicationModal } from "./CreateApplicationModal";
+import { DeleteApplicationModal } from "./DeleteApplicationModal";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
     const nav = useNavigate();
 
     useEffect(() => {
@@ -34,6 +36,13 @@ export function ApplicationsListPage() {
         setShowModal(false);
     }
 
+    async function handleDelete() {
+        if (!deleteId) return;
+        await deleteApplication(deleteId);
+        setApps((prev) => prev.filter((a) => a.id !== deleteId));
+        setDeleteId(null);
+    }
+
     return (
         <div className="page-container">
 
@@ -50,10 +59,12 @@ export function ApplicationsListPage() {
             <table className="applications-table">
                 <thead>
                     <tr>
-                        <th align="left">Company</th>
-                        <th align="left">Position</th>
-                        <th align="left">Status</th>
-                        <th align="left">Updated</th>
+                        <th>Company</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +74,8 @@ export function ApplicationsListPage() {
                             <td>{a.position}</td>
                             <td>{formatStatus(a.status)}</td>
                             <td>{new Date(a.updatedAtUtc).toLocaleString()}</td>
+                            <td><button>Edit</button></td>
+                            <td><button onClick={() => setDeleteId(a.id)}>Delete</button></td>
                         </tr>
                     ))}
                 </tbody>
@@ -70,6 +83,10 @@ export function ApplicationsListPage() {
 
             { showModal && (
                 <CreateApplicationModal onSubmit={handleCreate} onClose={() => setShowModal(false)} />
+            )}
+
+            { deleteId && (
+                <DeleteApplicationModal onConfirm={handleDelete} onClose={() => setDeleteId(null)} />
             )}
 
             {apps.length === 0 && !error && <p>No applications yet.</p>}

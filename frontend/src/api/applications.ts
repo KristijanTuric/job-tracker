@@ -56,3 +56,9 @@ export async function createApplication(request: CreateJobApplicationRequest): P
                 body: JSON.stringify(request),
     })) as JobApplicationResponse;
 }
+
+export async function deleteApplication(id: string): Promise<void> {
+    return (await apiFetch(`/api/applications/${id}`, {
+        method: "DELETE",
+    }));
+}
