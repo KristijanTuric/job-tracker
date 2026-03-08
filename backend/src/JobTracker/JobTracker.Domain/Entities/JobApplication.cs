@@ -17,4 +17,6 @@ public sealed class JobApplication
 
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     public DateTime UpdateAtUtc { get; set; } = DateTime.UtcNow;
+
+    public ICollection<Contact> Contacts { get; set; } = [];
 }
