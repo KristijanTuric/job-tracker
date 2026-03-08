@@ -1,4 +1,5 @@
 ﻿using JobTracker.Api.Auth;
+using JobTracker.Api.Contacts;
 using JobTracker.Domain.Entities;
 using JobTracker.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -109,6 +110,94 @@ public static class ApplicationEndpoints
             return Results.NoContent();
 
         }).WithName("DeleteApplication");
+
+        #region Contacts Endpoints
+
+        // Get all contacts for a job application
+        group.MapGet("/{id:guid}/contacts", async (Guid id, AppDbContext db, HttpContext http) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var contacts = await db.Contacts
+            .Where(x => x.JobApplication.OwnerId == userId && x.JobApplicationId == id)
+            .OrderBy(x => x.Name)
+            .Select(x => new ContactResponse(x.Id, x.JobApplicationId, x.Name, x.Email, x.Phone, x.Role, x.Notes))
+            .ToListAsync();
+
+            return Results.Ok(contacts);
+
+        }).WithName("ListContacts");
+
+        // CREATE a new Contact for a specific job application
+        group.MapPost("/{id:guid}/contacts", async (Guid id, CreateContactRequest request, AppDbContext db, HttpContext http) => 
+        {
+            var userId = http.User.GetUserId();
+
+            var application = await db.JobApplications
+                .FirstOrDefaultAsync(x => x.Id == id && x.OwnerId == userId);
+
+            if (application is null) return Results.NotFound();
+
+            var entity = new Contact
+            {
+                Id = Guid.NewGuid(),
+                JobApplicationId = id,
+                Name = request.Name,
+                Email = request.Email,
+                Phone = request.Phone,
+                Role = request.Role,
+                Notes = request.Notes
+            };
+
+            db.Contacts.Add(entity);
+            await db.SaveChangesAsync();
+
+            return Results.Created($"/applications/{id}/contacts/{entity.Id}", new ContactResponse(entity.Id, entity.JobApplicationId, entity.Name, entity.Email, entity.Phone, entity.Role, entity.Notes));
+        }).WithName("CreateContact");
+
+        // UPDATE an existings Contacts info
+        group.MapPut("/{id:guid}/contacts/{contactId:guid}", async (Guid id, Guid contactId, UpdateContactRequest request, AppDbContext db, HttpContext http) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var application = await db.JobApplications
+                .FirstOrDefaultAsync(x => x.Id == id && x.OwnerId == userId);
+
+            if (application is null) return Results.NotFound();
+
+            var entity = await db.Contacts
+                .Where(x => x.Id == contactId && x.JobApplicationId == id)
+                .SingleOrDefaultAsync();
+
+            if (entity is null) return Results.NotFound();
+
+            entity.Name = request.Name;
+            entity.Email = request.Email;
+            entity.Phone = request.Phone;
+            entity.Role = request.Role;
+            entity.Notes = request.Notes;
+
+            await db.SaveChangesAsync();
+            return Results.Ok(new ContactResponse(entity.Id, entity.JobApplicationId, entity.Name, entity.Email, entity.Phone, entity.Role, entity.Notes));
+        }).WithName("UpdateContact");
+
+        group.MapDelete("/{id:guid}/contacts/{contactId:guid}", async (Guid id, Guid contactId, AppDbContext db, HttpContext http) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var entity = await db.Contacts
+                .Where(x => x.Id == contactId && x.JobApplicationId == id && x.JobApplication.OwnerId == userId)
+                .SingleOrDefaultAsync();
+
+            if (entity is null) return Results.NotFound();
+
+            db.Contacts.Remove(entity);
+            await db.SaveChangesAsync();
+
+            return Results.NoContent();
+        }).WithName("DeleteContact");
+
+        #endregion
 
         return group;
     }
