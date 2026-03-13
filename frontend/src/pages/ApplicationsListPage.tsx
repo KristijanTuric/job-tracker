@@ -3,7 +3,7 @@ import { createApplication, deleteApplication, formatStatus, listApplications, u
 import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobApplicationRequest } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
-import '../styles/applicationList.css';
+import styles from '../styles/applicationList.module.css';
 import { CreateApplicationModal } from "./CreateApplicationModal";
 import { DeleteApplicationModal } from "./DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
@@ -55,9 +55,9 @@ export function ApplicationsListPage() {
     }
 
     return (
-        <div className="page-container">
+        <div className={styles.pageContainer}>
 
-            <div className="page-header">
+            <div className={styles.pageHeader}>
                 <h1>Applications List</h1>
                 <div>
                     <button onClick={() => setShowModal(true)}>+ Add</button>
@@ -67,7 +67,7 @@ export function ApplicationsListPage() {
 
             {error && <pre className="error">{error}</pre>}
 
-            <table className="applications-table">
+            <table className={styles.applicationsTable}>
                 <thead>
                     <tr>
                         <th>Company</th>

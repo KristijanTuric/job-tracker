@@ -1,5 +1,5 @@
 import { formatStatus, type JobApplicationResponse } from "../../api/applications";
-import '../../styles/modal.css';
+import styles from '../../styles/modal.module.css';
 
 type Props = {
     application: JobApplicationResponse;
@@ -18,34 +18,34 @@ function formatDateTime(date: string): string {
 export function DetailApplicationModal({ application, onClose }: Props) {
 
      return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalOverlay} onClick={onClose}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>{application.companyName}</h2>
-                <p className="detail-position">{application.position}</p>
+                <p className={styles.detailPosition}>{application.position}</p>
 
-                <div className="detail-grid">
-                    <div className="detail-label">Status</div>
+                <div className={styles.detailGrid}>
+                    <div className={styles.detailLabel}>Status</div>
                     <div>{formatStatus(application.status)}</div>
 
-                    <div className="detail-label">Applied On</div>
+                    <div className={styles.detailLabel}>Applied On</div>
                     <div>{formatDate(application.appliedOn)}</div>
 
-                    <div className="detail-label">Source URL</div>
+                    <div className={styles.detailLabel}>Source URL</div>
                     <div>
                         {application.sourceUrl ? <a href={application.sourceUrl} target="_blank" rel="noopener noreferrer">{application.sourceUrl}</a> : "-"}
                     </div>
 
-                    <div className="detail-label">Notes</div>
-                    <div className="detail-notes">{application.notes || "—"}</div>
+                    <div className={styles.detailLabel}>Notes</div>
+                    <div className={styles.detailNotes}>{application.notes || "—"}</div>
 
-                    <div className="detail-label">Created</div>
+                    <div className={styles.detailLabel}>Created</div>
                     <div>{formatDateTime(application.createdAtUtc)}</div>
 
-                    <div className="detail-label">Updated</div>
+                    <div className={styles.detailLabel}>Updated</div>
                     <div>{formatDateTime(application.updatedAtUtc)}</div>
                 </div>
 
-                <div className="modal-actions">
+                <div className={styles.modalActions}>
                     <button type="button" onClick={onClose}>Close</button>
                 </div>
             </div>

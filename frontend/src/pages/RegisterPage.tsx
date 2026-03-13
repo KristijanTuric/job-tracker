@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/auth";
-import '../styles/register.css';
+import styles from '../styles/register.module.css';
 
 export function RegisterPage() {
     const nav = useNavigate();
@@ -22,9 +22,9 @@ export function RegisterPage() {
     }
 
     return (
-        <div className="page-container">
+        <div className={styles.pageContainer}>
             <h1>Register</h1>
-            <form onSubmit={onSubmit} className="register-form">
+            <form onSubmit={onSubmit} className={styles.registerForm}>
                 <label>
                     Email
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>

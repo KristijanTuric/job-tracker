@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/auth.ts";
-import '../styles/login.css';
+import styles from '../styles/login.module.css';
 
 export function LoginPage() {
     const nav = useNavigate();
@@ -22,26 +22,28 @@ export function LoginPage() {
     }
 
     return (
-        <div className="page-container">
-            <h1>Login</h1>
-            <form className="login-form" onSubmit={onSubmit}>
-                <label>
-                    Email
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
-                </label>
-                <label>
-                    Password
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"/>
-                </label>
-                <button type="submit">Login</button>
-            </form>
+        <div className={styles.rootContainer}>
+            <div className={styles.pageContainer}>
+                <h1>Login</h1>
+                <form className={styles.loginForm} onSubmit={onSubmit}>
+                    <label>
+                        Email
+                        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
+                    </label>
+                    <label>
+                        Password
+                        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"/>
+                    </label>
+                    <button type="submit">Login</button>
+                </form>
 
-            <div>
-                <p>
-                    Don't have an account? <Link to="/register">Register</Link>
-                </p>
+                <div>
+                    <p>
+                        Don't have an account? <Link to="/register">Register</Link>
+                    </p>
+                </div>
+                {error && <pre className="error">{error}</pre>}
             </div>
-            {error && <pre className="error">{error}</pre>}
         </div>
     );
 }

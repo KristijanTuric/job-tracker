@@ -1,29 +1,29 @@
-.page-container {
+.pageContainer {
     max-width: 900px;
     margin: 40px auto;
 }
 
-.page-header {
+.pageHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.applications-table {
+.applicationsTable {
     width: 100%;
     border-collapse: collapse;
 }
 
-.applications-table th,
-.applications-table td {
+.applicationsTable th,
+.applicationsTable td {
     padding: 8px;
     text-align: left;
 }
 
-.applications-table tbody tr {
+.applicationsTable tbody tr {
     cursor: pointer;
 }
 
-.applications-table tbody tr:hover {
+.applicationsTable tbody tr:hover {
     background-color: rgb(240, 252, 255);
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { JobApplicationResponse, UpdateJobApplicationRequest } from "../../api/applications"
-import '../../styles/modal.css';
+import styles from '../../styles/modal.module.css';
 
 type Props = {
     application: JobApplicationResponse;
@@ -36,10 +36,10 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
     }
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalOverlay} onClick={onClose}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>Edit Application</h2>
-                <form onSubmit={handleSubmit} className="modal-form">
+                <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <label>
                         Company
                         <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />
@@ -71,7 +71,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                         Notes
                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
                     </label>
-                    <div className="modal-actions">
+                    <div className={styles.modalActions}>
                         <button type="button" onClick={onClose}>Cancel</button>
                         <button type="submit">Save</button>
                     </div>

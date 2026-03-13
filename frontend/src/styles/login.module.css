@@ -1,0 +1,27 @@
+.rootContainer {
+    background-color: lightcoral;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.pageContainer {
+    max-width: 40vw;
+    width: 40vw;
+    height: 100vh;
+    background-color: white;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+}
+
+.loginForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
