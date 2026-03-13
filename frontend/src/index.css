@@ -1,3 +1,52 @@
+/* Global style reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+*:not(dialog) {
+  margin: 0;
+}
+
+body {
+  /* line-height: 1.5; */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Use this to make paragraph text line higher while header line spacing is smaller */
+* {
+  line-height: calc(1em + 0.5rem);
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+}
+
+#root {
+  isolation: isolate;
+}
+
+/* End of global style reset */
+
+html {
+    font-family: Nunito;
+}
+
 .error {
     color: crimson;
     white-space: pre-wrap;
