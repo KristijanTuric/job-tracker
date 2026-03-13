@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { LoginPage } from './pages/LoginPage.tsx'
 import { RequireAuth } from './auth/RequireAuth.tsx'
 import { ApplicationsListPage } from './pages/ApplicationsListPage.tsx'
@@ -11,7 +11,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/applications" replace />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<ApplicationsListPage />}/>
+        </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<RequireAuth />}>
