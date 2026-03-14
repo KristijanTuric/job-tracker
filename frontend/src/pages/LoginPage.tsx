@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/auth.ts";
 import styles from '../styles/login.module.css';
+import { LoadingComponent } from "../components/LoadingComponent.tsx";
 
 export function LoginPage() {
     const nav = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     async function onSubmit(e: React.SubmitEvent) {
@@ -14,10 +16,13 @@ export function LoginPage() {
         setError(null);
 
         try {
+            setLoading(true);
             await login({email, password});
             nav("/applications");
         } catch (err) {
             setError(err instanceof Error ? err.message : "Login failed");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -25,24 +30,19 @@ export function LoginPage() {
         <div className={styles.rootContainer}>
             <div className={styles.pageContainer}>
                 <h1>Login</h1>
-                <form className={styles.loginForm} onSubmit={onSubmit}>
-                    <label>
-                        Email
-                        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
-                    </label>
-                    <label>
-                        Password
-                        <input value={password} onChange={(e) => setPassword(e.target.value)} type="password"/>
-                    </label>
-                    <button type="submit">Login</button>
+                <form className={styles.loginForm} onSubmit={onSubmit}>                    
+                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" autoComplete="off" />
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" autoComplete="off" />
+                    {error && <pre className="error">{error}</pre>}
+                    <button type="submit">LOGIN</button>
                 </form>
 
-                <div>
+                <div className={styles.registerLink}>
                     <p>
                         Don't have an account? <Link to="/register">Register</Link>
                     </p>
                 </div>
-                {error && <pre className="error">{error}</pre>}
+                {loading && <LoadingComponent></LoadingComponent>}
             </div>
         </div>
     );
