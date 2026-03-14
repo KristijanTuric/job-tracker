@@ -1,27 +1,111 @@
 .rootContainer {
-    background-color: lightcoral;
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
+    background-image: url("/src/assets/loginBackground.jpg");
+    background-color: transparent;
+    background-size: cover;
 }
 
 .pageContainer {
-    max-width: 40vw;
-    width: 40vw;
+    max-width: 33vw;
+    width: 33vw;
     height: 100vh;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 80px;
+}
+
+.pageContainer h1 {
+    font-size: 3em;
+    margin-top: 10vh;
+    user-select: none;
 }
 
 .loginForm {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    max-width: 400px;
+    gap: 26px;
+    max-width: 30vw;
+    width: 30vw;
+    align-items: center;
 }
 
-.loginForm label {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.loginForm input {
+    padding: 8px;
+    border: none;
+    border-bottom: 2px rgb(170, 170, 170) solid;
+    font-size: larger;
+
+    width: 30vw;
+}
+
+.loginForm input:hover {
+    border-bottom: 2px rgb(150, 150, 150) solid;
+}
+
+.loginForm input:active {
+    background-color: rgb(246, 255, 255);
+}
+
+.loginForm input:focus {
+    outline: none;
+    border-bottom: 2px rgb(107, 107, 107) solid;
+}
+
+.loginForm button {
+    background-color: white;
+    border-radius: 28px;
+    height: 40px;
+    width: 25vw;
+    font-size: large;
+    font-weight: bold;
+    border: hidden;
+    box-shadow: 1px 1px 10px gray;
+    will-change: scale, background-color;
+
+    transition: 0.3s, scale 0.1s;
+}
+
+.loginForm button:hover {
+    background-color: ivory;
+}
+
+.loginForm button:active {
+    scale: 0.9;
+}
+
+.loginForm pre {
+    align-self: flex-start;
+    margin-left: 10px;
+}
+
+.registerLink {
+    font-size: x-large;
+}
+
+.registerLink a {
+    text-decoration: none;
+    user-select: none;
+    font-weight: bold;
+    color: rgb(119, 119, 119);
+    will-change: color;
+
+    transition: 0.2s;
+}
+
+.registerLink a:visited {
+    color: rgb(119, 119, 119);
+}
+
+.registerLink a:hover {
+    color: rgb(85, 85, 85);
+}
+
+.registerLink a:active {
+    color: rgb(48, 48, 48);
 }
