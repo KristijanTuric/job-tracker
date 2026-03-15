@@ -4,8 +4,8 @@ import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobAppl
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
 import styles from '../styles/applicationList.module.css';
-import { CreateApplicationModal } from "./CreateApplicationModal";
-import { DeleteApplicationModal } from "./DeleteApplicationModal";
+import { CreateApplicationModal } from "./modals/CreateApplicationModal";
+import { DeleteApplicationModal } from "./modals/DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
 import { DetailApplicationModal } from "./modals/DetailApplicationModal";
 

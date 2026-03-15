@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { CreateJobApplicationRequest } from "../api/applications"
-import styles from '../styles/modal.module.css';
+import type { CreateJobApplicationRequest } from "../../api/applications"
+import styles from '../../styles/modal.module.css';
 
 type Props = {
     onSubmit: (request: CreateJobApplicationRequest) => Promise<void>;
