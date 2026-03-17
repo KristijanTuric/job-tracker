@@ -1,0 +1,8 @@
+.contactsContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.contactDisplay {
+    display: flex;
+}

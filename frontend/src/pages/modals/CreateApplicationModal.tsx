@@ -1,9 +1,12 @@
 import { useState } from "react";
 import type { CreateJobApplicationRequest } from "../../api/applications"
 import styles from '../../styles/modal.module.css';
+import createStyles from '../../styles/createApplication.module.css'
+import { type CreateContactRequest } from "../../api/contacts";
+import { CreateContactModal } from "./Contacts/CreateContactModal";
 
 type Props = {
-    onSubmit: (request: CreateJobApplicationRequest) => Promise<void>;
+    onSubmit: (request: CreateJobApplicationRequest, contacts: CreateContactRequest[]) => Promise<void>;
     onClose: () => void;
 };
 
@@ -14,8 +17,10 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
     const [appliedOn, setAppliedOn] = useState("");
     const [sourceUrl, setSourceUrl] = useState("");
     const [notes, setNotes] = useState("");
+    const [showCreateContact, setShowCreateContact] = useState(false);
+    const [contacts, setContacts] = useState<CreateContactRequest[]>([]);
     const [error, setError] = useState<string | null>(null);
-
+    
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
         setError(null);
@@ -28,10 +33,19 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                 appliedOn: appliedOn || null,
                 sourceUrl: sourceUrl || null,
                 notes: notes || null,
-            });
+            }, contacts);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to create application.");
         }
+    }
+
+    function showAddContactModal() {
+        setShowCreateContact(true);
+    }
+
+    async function handleSaveContact(request: CreateContactRequest) {
+        setContacts((prev) => [...prev, request]);
+        setShowCreateContact(false);
     }
 
     return (
@@ -70,6 +84,16 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                         Notes
                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
                     </label>
+                    <div className={createStyles.contactsContainer}>
+                        <div>Contacts</div>
+                        {contacts.map((c) => (
+                            <div className={createStyles.contactDisplay}>
+                                <div>{c.name}</div>
+                                <button type="button" onClick={() => setContacts((prev) => prev.filter((cont) => cont.name !== c.name))}>Del</button>
+                            </div>
+                        ))}
+                        <button type="button" onClick={showAddContactModal}>Add Contact</button>
+                    </div>
                     <div className={styles.modalActions}>
                         <button type="button" onClick={onClose}>Cancel</button>
                         <button type="submit">Create</button>
@@ -77,6 +101,10 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                 </form>
                 {error && <pre className="error">{error}</pre>}
             </div>
+
+            { showCreateContact && (
+                <CreateContactModal onSubmit={handleSaveContact} onClose={() => setShowCreateContact(false)} />
+            )}
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { CreateApplicationModal } from "./modals/CreateApplicationModal";
 import { DeleteApplicationModal } from "./modals/DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
 import { DetailApplicationModal } from "./modals/DetailApplicationModal";
+import { createContact, type CreateContactRequest } from "../api/contacts";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
@@ -34,9 +35,14 @@ export function ApplicationsListPage() {
         nav("/login");
     }
 
-    async function handleCreate(request: CreateJobApplicationRequest) {
+    async function handleCreate(request: CreateJobApplicationRequest, contacts: CreateContactRequest[]) {
         const created = await createApplication(request);
         setApps((prev) => [...prev, created]);
+
+        for (var contact of contacts) {
+            await createContact(created.id, contact);
+        }
+
         setShowModal(false);
     }
 
