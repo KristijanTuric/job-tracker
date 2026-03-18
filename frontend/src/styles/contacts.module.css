@@ -1,0 +1,49 @@
+.contactContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.contactContainer {
+    user-select: none;
+    cursor: pointer;
+}
+
+.contactContainer:hover {
+    border-radius: 10px;
+    background-color: rgb(238, 251, 255);
+}
+
+.contactName {
+    font-weight: bold;
+    color: gray;
+    will-change: color;
+
+    transition: 0.2s;
+}
+
+.contactName:hover {
+    color: black;
+}
+
+.contactActions {
+    display: flex;
+    gap: 5px;
+}
+
+.contactGrid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px 16px;
+    margin: 16px 0;
+}
+
+.contactLabel {
+    font-weight: 600;
+    color: #555;
+}
+
+.contactNotes {
+    white-space: pre-wrap;
+}
