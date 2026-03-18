@@ -8,28 +8,24 @@
 .contactContainer {
     user-select: none;
     cursor: pointer;
+    color: gray;
+    
+    font-weight: bold;
+    will-change: color;
+    
+    transition: 0.2s;
 }
 
 .contactContainer:hover {
     border-radius: 10px;
     background-color: rgb(238, 251, 255);
-}
-
-.contactName {
-    font-weight: bold;
-    color: gray;
-    will-change: color;
-
-    transition: 0.2s;
-}
-
-.contactName:hover {
     color: black;
 }
 
 .contactActions {
     display: flex;
     gap: 5px;
+    font-weight: normal;
 }
 
 .contactGrid {
@@ -46,4 +42,18 @@
 
 .contactNotes {
     white-space: pre-wrap;
+}
+
+.contactInfo {
+    color: #0969da;
+    text-decoration: none;
+}
+
+.contactInfo:hover {
+    text-decoration: underline;
+}
+
+.emptyInfo {
+    color: black;
+    text-decoration: none;
 }

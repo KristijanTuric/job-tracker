@@ -20,11 +20,19 @@ export function DetailContactModal({ contact, onClose }: Props) {
 
                 <div className={contactStyles.contactGrid}>
                     <div className={contactStyles.contactLabel}>Email</div>
-                    <div>{contact.email || "-"}</div>
+                    {contact.email ? (
+                         <a className={contactStyles.contactInfo} href={`mailto:${contact.email}`}>{contact.email}</a>
+                    ) : (
+                        <div>-</div>
+                    )}
 
                     <div className={contactStyles.contactLabel}>Phone</div>
-                    <div>{contact.phone || "-"}</div>
-
+                    {contact.phone ? (
+                         <a className={contactStyles.contactInfo} href={`tel:${contact.phone}`}>{contact.phone}</a>
+                    ):(
+                        <div>-</div>
+                    )}
+                    
                     <div className={contactStyles.contactLabel}>Role</div>
                     <div>{contact.role || "-"}</div>
 
