@@ -31,7 +31,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                 notes: notes || null,
             });
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to create application.");
+            setError(err instanceof Error ? err.message : "Failed to update application.");
         }
     }
 
