@@ -8,6 +8,14 @@ export type CreateContactRequest = {
     notes: string | null;
 }
 
+export type UpdateContactRequest = {
+    name: string;
+    email: string | null;
+    phone: string | null;
+    role: string | null;
+    notes: string | null;
+}
+
 export type ContactResponse = {
     id: string;
     jobApplicationId: string;
@@ -28,4 +36,18 @@ export async function createContact(jobApplicationId: string, request: CreateCon
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(request),
     })) as ContactResponse;
+}
+
+export async function updateContact(jobApplicationId: string, contactId: string, request: UpdateContactRequest): Promise<ContactResponse> {
+    return ( await apiFetch(`api/applications/${jobApplicationId}/contacts/${contactId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+    })) as ContactResponse;
+}
+
+export async function deleteContact(jobApplicationId: string, contactId: string): Promise<void> {
+    return ( await apiFetch(`api/applications/${jobApplicationId}/contacts/${contactId}`, {
+        method: "DELETE",
+    }));
 }

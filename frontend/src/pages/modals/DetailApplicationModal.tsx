@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { formatStatus, type JobApplicationResponse } from "../../api/applications";
 import styles from '../../styles/modal.module.css';
 import contactStyles from '../../styles/contacts.module.css';
-import { listContacts, type ContactResponse } from "../../api/contacts";
+import { deleteContact, listContacts, type ContactResponse } from "../../api/contacts";
 import { DataLoadingComponent } from "../../components/DataLoadingComponent";
 import { DetailContactModal } from "./Contacts/DetailContactModal";
+import { DeleteApplicationModal } from "./DeleteApplicationModal";
 
 type Props = {
     application: JobApplicationResponse;
@@ -24,6 +25,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
     const [contacts, setContacts] = useState<ContactResponse[]>([]);
     const [loading, setLoading] = useState(false);
     const [detailId, setDetailId] = useState<string | null>(null);
+    const [deleteId, setDeleteId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -40,7 +42,18 @@ export function DetailApplicationModal({ application, onClose }: Props) {
             })();
         }, []);
 
-     return (
+    function handleEditContact() {
+
+    }
+
+    async function handleDeleteContact(): Promise<void> {
+        if (!deleteId) return;
+        await deleteContact(application.id, deleteId);
+        setContacts((prev) => prev.filter((c) => c.id !== deleteId));
+        setDeleteId(null);
+    }
+
+    return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>{application.companyName}</h2>
@@ -74,7 +87,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
                                 <div className={contactStyles.contactName}>{c.name}</div>
                                 <div className={contactStyles.contactActions}>
                                     <button type="button" onClick={ (e) => {e.stopPropagation(); }}>Ed</button>
-                                    <button type="button" onClick={ (e) => {e.stopPropagation(); }}>Del</button>
+                                    <button type="button" onClick={ (e) => {e.stopPropagation(); setDeleteId(c.id)}}>Del</button>
                                 </div>                                
                             </div>
                         ))}
@@ -88,6 +101,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
                 </div>
                 {loading && <DataLoadingComponent></DataLoadingComponent>}
                 {detailId && <DetailContactModal contact={contacts.find((c) => c.id === detailId)!} onClose={() => setDetailId(null)}></DetailContactModal>}
+                {deleteId && <DeleteApplicationModal onConfirm={handleDeleteContact} onClose={() => setDeleteId(null)}></DeleteApplicationModal>}
             </div>
         </div>
     )

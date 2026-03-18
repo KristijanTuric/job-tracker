@@ -8,7 +8,10 @@ type Props = {
 export function DeleteApplicationModal({ onConfirm, onClose }: Props) {
 
     return (
-        <div className={styles.modalOverlay} onClick={onClose}>
+        <div className={styles.modalOverlay} onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+            }}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>Are you sure?</h2>
                 <div className={styles.modalActions}>
