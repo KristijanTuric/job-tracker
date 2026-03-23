@@ -44,10 +44,10 @@ h1, h2, h3, h4, h5, h6 {
 /* End of global style reset */
 
 html {
-    font-family: Nunito;
+  font-family: Nunito;
 }
 
 .error {
-    color: crimson;
-    white-space: pre-wrap;
+  color: crimson;
+  white-space: pre-wrap;
 }
