@@ -88,7 +88,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
                     <div className={styles.detailLabel}>Contacts</div>
                     <div>
                         {contacts.map((c) => (
-                            <div className={contactStyles.contactContainer} onClick={() => setDetailId(c.id)}>
+                            <div key={c.id} className={contactStyles.contactContainer} onClick={() => setDetailId(c.id)}>
                                 <div className={contactStyles.contactName}>{c.name}</div>
                                 <div className={contactStyles.contactActions}>
                                     <button type="button" onClick={ (e) => {e.stopPropagation(); setEditId(c.id) }}>Ed</button>
