@@ -134,3 +134,12 @@
     font-size: 1.5rem;
     color: #1f2937;
 }
+
+.emptyApplications {
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}

@@ -152,7 +152,7 @@ export function ApplicationsListPage() {
                 <DetailApplicationModal application={apps.find((a) => a.id === detailId)!} onClose={() => setDetailId(null)} />
             )}
 
-            {apps.length === 0 && !error && <p>No applications yet.</p>}
+            {apps.length === 0 && !error && <p className={styles.emptyApplications}>No applications yet</p>}
         </div>
     );
 }
