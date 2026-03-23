@@ -1,17 +1,33 @@
 .pageContainer {
     max-width: 900px;
-    margin: 40px auto;
+    margin: 0px auto;
+
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 0;
 }
 
 .pageHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 20px 40px;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.pageHeader h1 {
+    font-size: 1.5rem;
+    color: #1f2937;
 }
 
 .applicationsTable {
     width: 100%;
     border-collapse: collapse;
+
+    max-width: 1200px;
+    margin: 32px auto;
+    padding: 0 40px;
 }
 
 .applicationsTable th,
@@ -20,10 +36,101 @@
     text-align: left;
 }
 
+.applicationsTable td {
+    padding: 14px 16px;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.applicationsTable th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+}
+
 .applicationsTable tbody tr {
     cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
 .applicationsTable tbody tr:hover {
-    background-color: rgb(240, 252, 255);
+    background-color: rgb(240, 252, 255);    
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+    z-index: 1;
+    
+    /* More dramatic effect */
+    /*
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02) translateY(-2px);
+    */
+}
+
+.actions {
+    display: flex;
+    gap: 20px;
+}
+
+/* Button Styles */
+
+.editButton:hover {
+    background-color: aquamarine;
+}
+
+
+.deleteButton:hover {
+    background-color: lightcoral;
+}
+
+/* TODO Empty state when no applications exist */
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    color: #9ca3af;
+}
+
+.emptyState p {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+/* TODO Optional stats bar */
+.statsContainer {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    flex: 1;
+}
+
+.statsElement {
+    background-color: white;
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    flex: 1;
+}
+
+.statsElement span {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.statsElement strong {
+    font-size: 1.5rem;
+    color: #1f2937;
 }
