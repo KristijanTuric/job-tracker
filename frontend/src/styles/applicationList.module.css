@@ -89,19 +89,6 @@
     background-color: lightcoral;
 }
 
-/* TODO Empty state when no applications exist */
-.emptyState {
-    text-align: center;
-    padding: 60px 20px;
-    color: #9ca3af;
-}
-
-.emptyState p {
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-}
-
-/* TODO Optional stats bar */
 .statsContainer {
     display: flex;
     margin: 10px;
@@ -137,10 +124,11 @@
 }
 
 .emptyApplications {
-    color: #6b7280;
+    color: #9ca3af;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
+    padding: 60px 20px;
 }
