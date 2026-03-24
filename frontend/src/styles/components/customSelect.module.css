@@ -1,0 +1,74 @@
+.wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.trigger {
+    font-family: Nunito;
+    font-weight: 500;
+    padding: 8px 12px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    background-color: transparent;
+    border-bottom: 2px solid rgb(163, 163, 163);
+    transition: 0.1s;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trigger:hover {
+    border-bottom: 2px rgb(150, 150, 150) solid;
+}
+
+.trigger:active {
+    background-color: rgb(246, 255, 255);
+}
+
+.trigger:focus {
+    outline: none;
+    border-bottom: 2px rgb(107, 107, 107) solid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
+}
+
+.dropdown {
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    background: white;
+    width: 100%;
+    z-index: 10;
+}
+
+.option {
+    font-family: Nunito;
+    font-weight: 550;         
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: #f0f0f0;
+}
+
+.rotatingArrow {
+    animation: spin 0.2s linear forwards;
+}
+
+.rotateBackArrow {
+    animation: spinBack 0.2s linear forwards;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg);}
+    to { transform: rotate(90deg); }
+}
+
+@keyframes spinBack {
+    from { transform: rotate(90deg);}
+    to { transform: rotate(0deg); }
+}
