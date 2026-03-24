@@ -1,5 +1,30 @@
 /* Button Styles */
 
+.defaultButton {
+    border: none;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    padding: 10px;
+
+    transition: 0.2s;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    max-width: fit-content;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    border-radius: 10px;
+
+    transition: 0.2s;   
+}
+
+.defaultButton:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
+}
+
 .iconTextButton {
     border: none;
     background-color: transparent;
@@ -13,6 +38,8 @@
 
     transition: 0.2s;
     cursor: pointer;
+    align-items: center;
+    justify-content: center;
 }
 
 .iconTextButton:hover {
@@ -31,4 +58,16 @@
 
 .iconButton:hover {
     scale: 1.2;
+}
+
+.contactAddButton:hover {
+    background-color: lightcyan;
+}
+
+.modalConfirmButton:hover {
+    background-color: rgb(181, 250, 181);
+}
+
+.modalCancelButton:hover {
+    background-color: rgb(252, 169, 164);
 }

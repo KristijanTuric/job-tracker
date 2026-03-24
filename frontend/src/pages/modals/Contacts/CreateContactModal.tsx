@@ -42,7 +42,7 @@ export function CreateContactModal({ onSubmit, onClose }: Props) {
                 <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <label>
                         Name
-                        <input value={name} onChange={(e) => setName(e.target.value)} required />
+                        <input autoFocus value={name} onChange={(e) => setName(e.target.value)} required />
                     </label>
                     <label>
                         Email

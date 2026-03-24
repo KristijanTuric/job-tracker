@@ -2,8 +2,11 @@ import { useState } from "react";
 import type { CreateJobApplicationRequest } from "../../api/applications"
 import styles from '../../styles/modal.module.css';
 import createStyles from '../../styles/createApplication.module.css'
+import defaultStyles from '../../styles/defaults.module.css';
 import { type CreateContactRequest } from "../../api/contacts";
 import { CreateContactModal } from "./Contacts/CreateContactModal";
+import { CustomSelect } from "../../components/CustomSelect";
+import { PlusCircleIcon, TrashIcon } from "@phosphor-icons/react";
 
 type Props = {
     onSubmit: (request: CreateJobApplicationRequest, contacts: CreateContactRequest[]) => Promise<void>;
@@ -53,50 +56,64 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>New Application</h2>
                 <form onSubmit={handleSubmit} className={styles.modalForm}>
-                    <label>
-                        Company
-                        <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />
-                    </label>
-                    <label>
-                        Position
+                    <div className={styles.formInput}>
+                        <label>Company</label>
+                        <input autoFocus value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />
+                    </div>                    
+
+                    <div className={styles.formInput}>
+                        <label>Position</label>
                         <input value={position} onChange={(e) => setPosition(e.target.value)} required />
-                    </label>
-                    <label>
-                        Status
-                        <select value={status} onChange={(e) => setStatus(Number(e.target.value))}>
+                    </div>
+
+                    <div className={styles.formInput}>
+                        <label>Status</label>
+                        <CustomSelect value={status} onChange={(e) => setStatus(e)} options={[
+                            {value: 0, label: "Not Applied"}, 
+                            {value: 1, label: "Applied"},
+                            {value: 2, label: "Interviewing"},
+                            {value: 3, label: "Rejected"},
+                            {value: 4, label: "Accepted"},
+                            {value: 5, label: "Archived"}]}></CustomSelect>
+                            
+                        {/* <select value={status} onChange={(e) => setStatus(Number(e.target.value))}>
                             <option value={0}>Not Applied</option>
                             <option value={1}>Applied</option>
                             <option value={2}>Interviewing</option>
                             <option value={3}>Rejected</option>
                             <option value={4}>Accepted</option>
                             <option value={5}>Archived</option>
-                        </select>
-                    </label>
-                    <label>
-                        Applied On
-                        <input type="date" value={appliedOn} onChange={(e) => setAppliedOn(e.target.value)} />
-                    </label>
-                    <label>
-                        Source Url
+                        </select> */}
+                    </div>                                        
+
+                    <div className={styles.formInput}>
+                        <label>Applied On</label>
+                        <input type="date" value={appliedOn} onChange={(e) => setAppliedOn(e.target.value)} />                        
+                    </div>                    
+
+                    <div className={styles.formInput}>
+                         <label>Source Url</label>
                         <input type="url" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} />
-                    </label>
-                    <label>
-                        Notes
+                    </div>                   
+
+                    <div className={styles.formInput}>
+                        <label>Notes</label>
                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
-                    </label>
+                    </div>                    
+
                     <div className={createStyles.contactsContainer}>
-                        <div>Contacts</div>
+                        <label>Contacts</label>
                         {contacts.map((c) => (
                             <div className={createStyles.contactDisplay}>
                                 <div>{c.name}</div>
-                                <button type="button" onClick={() => setContacts((prev) => prev.filter((cont) => cont.name !== c.name))}>Del</button>
+                                <button className={defaultStyles.iconButton} type="button" onClick={() => setContacts((prev) => prev.filter((cont) => cont.name !== c.name))}><TrashIcon size={28} /></button>
                             </div>
                         ))}
-                        <button type="button" onClick={showAddContactModal}>Add Contact</button>
+                        <button type="button" onClick={showAddContactModal} className={`${defaultStyles.defaultButton} ${defaultStyles.contactAddButton}`}><PlusCircleIcon size={25} />Add Contact</button>
                     </div>
                     <div className={styles.modalActions}>
-                        <button type="button" onClick={onClose}>Cancel</button>
-                        <button type="submit">Create</button>
+                        <button type="button" onClick={onClose} className={`${defaultStyles.defaultButton} ${defaultStyles.modalCancelButton}`}>Cancel</button>
+                        <button type="submit" className={`${defaultStyles.defaultButton} ${defaultStyles.modalConfirmButton}`}>Create</button>
                     </div>
                 </form>
                 {error && <pre className="error">{error}</pre>}

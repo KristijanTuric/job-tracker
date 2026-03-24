@@ -21,16 +21,104 @@
     overflow-y: auto;
 }
 
+.modalContent label {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    color: #6b7280;
+}
+
+.modalContent h2 {
+    margin-bottom: 20px;
+}
+
 .modalForm {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
 }
 
 .modalForm label {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+}
+
+.modalForm input, textarea, select {
+    width: 100%;
+    padding: 5px;
+
+}
+
+.modalForm input {
+    border: hidden;
+    border-bottom: 2px solid rgb(163, 163, 163);
+
+    transition: 0.1s;
+}
+
+.modalForm input:hover {
+    border-bottom: 2px rgb(150, 150, 150) solid;
+}
+
+.modalForm input:active {
+    background-color: rgb(246, 255, 255);
+}
+
+.modalForm input:focus {
+    outline: none;
+    border-bottom: 2px rgb(107, 107, 107) solid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
+}
+
+.modalForm select {
+    border: hidden;
+    border-bottom: 2px solid rgb(163, 163, 163);
+    background-color: white;
+
+    transition: 0.1s;
+}
+
+.modalForm select:hover {
+    border-bottom: 2px rgb(150, 150, 150) solid;
+}
+
+.modalForm select:focus {
+    outline: none;
+    border-bottom: 2px rgb(107, 107, 107) solid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
+}
+
+.modalForm textarea {
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 100px;
+
+    border: hidden;
+    border-bottom: 2px solid rgb(163, 163, 163);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+
+    transition: 0.1s;
+}
+
+.modalForm textarea:hover {
+    border-bottom: 2px rgb(150, 150, 150) solid;
+}
+
+.modalForm textarea:active {
+    background-color: rgb(246, 255, 255);
+}
+
+.modalForm textarea:focus {
+    outline: none;
+    border-bottom: 2px rgb(107, 107, 107) solid;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
+}
+
+.formInput {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
 .modalActions {

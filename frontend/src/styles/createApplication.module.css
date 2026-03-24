@@ -1,8 +1,12 @@
 .contactsContainer {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .contactDisplay {
     display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: larger;
 }
