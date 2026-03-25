@@ -89,23 +89,23 @@ export function ApplicationsListPage() {
             {error && <pre className="error">{error}</pre>}
 
             <div className={styles.statsContainer}>
-                <div className={styles.statsElement}>
+                <div className={`${styles.statsElement} ${styles.notApplied}`}>
                     <span>Not Applied</span>
                     <strong>{stats.notApplied}</strong>
                 </div>
-                <div className={styles.statsElement}>
+                <div className={`${styles.statsElement} ${styles.applied}`}>
                     <span>Applied</span>
                     <strong>{stats.applied}</strong>
                 </div>
-                <div className={styles.statsElement}>
+                <div className={`${styles.statsElement} ${styles.interviewing}`}>
                     <span>Interviewing</span>
                     <strong>{stats.interviewing}</strong>
                 </div>
-                <div className={styles.statsElement}>
+                <div className={`${styles.statsElement} ${styles.rejected}`}>
                     <span>Rejected</span>
                     <strong>{stats.rejected}</strong>
                 </div>
-                <div className={styles.statsElement}>
+                <div className={`${styles.statsElement} ${styles.accepted}`}>
                     <span>Accepted</span>
                     <strong>{stats.accepted}</strong>
                 </div>

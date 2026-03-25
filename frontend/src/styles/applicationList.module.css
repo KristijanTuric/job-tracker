@@ -123,6 +123,33 @@
     color: #1f2937;
 }
 
+/* Softer status bar colors */
+
+.notApplied {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.applied {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.interviewing {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.accepted {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
 .emptyApplications {
     color: #9ca3af;
     text-transform: uppercase;
