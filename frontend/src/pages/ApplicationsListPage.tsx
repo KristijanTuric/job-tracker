@@ -82,7 +82,7 @@ export function ApplicationsListPage() {
                 <h1>Your Applications</h1>
                 <div className={styles.actions}>
                     <button className={`${defaultStyles.iconTextButton}`} onClick={() => setShowModal(true)}><PlusCircleIcon size={32} /> Add Application</button>
-                    <button className={`${styles.deleteButton} ${defaultStyles.iconButton}`} onClick={handleLogout}><SignOutIcon size={32} /></button>
+                    <button className={`${defaultStyles.deleteButton} ${defaultStyles.iconButton}`} onClick={handleLogout}><SignOutIcon size={32} /></button>
                 </div>
             </div>
 
@@ -129,8 +129,8 @@ export function ApplicationsListPage() {
                             <td>{a.position}</td>
                             <td>{formatStatus(a.status)}</td>
                             <td>{new Date(a.updatedAtUtc).toLocaleString("en-GB")}</td>
-                            <td><button className={`${styles.editButton} ${defaultStyles.iconButton}`} onClick={(e) => { e.stopPropagation(); setUpdateId(a.id); }}><NotePencilIcon size={30} /></button></td>
-                            <td><button className={`${styles.deleteButton} ${defaultStyles.iconButton}`} onClick={(e) => { e.stopPropagation(); setDeleteId(a.id); }}><TrashIcon size={30} /></button></td>
+                            <td><button className={`${defaultStyles.editButton} ${defaultStyles.iconButton}`} onClick={(e) => { e.stopPropagation(); setUpdateId(a.id); }}><NotePencilIcon size={30} /></button></td>
+                            <td><button className={`${defaultStyles.deleteButton} ${defaultStyles.iconButton}`} onClick={(e) => { e.stopPropagation(); setDeleteId(a.id); }}><TrashIcon size={30} /></button></td>
                         </tr>
                     ))}
                 </tbody>

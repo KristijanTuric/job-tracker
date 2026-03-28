@@ -33,6 +33,22 @@
     margin-bottom: 20px;
 }
 
+.modalContent a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.2s ease;
+}
+
+.modalContent a:hover {
+    border-bottom: 1px solid #3b82f6;
+}
+
+.modalContent a:visited {
+    color: #3b82f6;
+}
+
 .modalForm {
     display: flex;
     flex-direction: column;
@@ -141,10 +157,23 @@
 }
 
 .detailLabel {
+    padding: 5px 0px;
     font-weight: 600;
     color: #555;
 }
 
 .detailNotes {
     white-space: pre-wrap;
+}
+
+.detailDisplay {
+    padding: 5px 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+
+    transition: 0.3s;
+}
+
+.detailDisplay:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.48);
 }

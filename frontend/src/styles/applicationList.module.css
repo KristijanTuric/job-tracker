@@ -78,17 +78,6 @@
     gap: 20px;
 }
 
-/* Button Styles */
-
-.editButton:hover {
-    background-color: aquamarine;
-}
-
-
-.deleteButton:hover {
-    background-color: lightcoral;
-}
-
 .statsContainer {
     display: flex;
     margin: 10px;

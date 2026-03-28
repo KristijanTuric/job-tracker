@@ -71,3 +71,11 @@
 .modalCancelButton:hover {
     background-color: rgb(252, 169, 164);
 }
+
+.editButton:hover {
+    background-color: aquamarine;
+}
+
+.deleteButton:hover {
+    background-color: lightcoral;
+}
