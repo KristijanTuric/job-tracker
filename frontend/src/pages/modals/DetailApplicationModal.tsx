@@ -88,7 +88,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
                     <div className={styles.detailDisplay}>{formatDateTime(application.updatedAtUtc)}</div>
 
                     <div className={styles.detailLabel}>Contacts</div>
-                    <div>
+                    <div className={styles.detailDisplay}>
                         {contacts.map((c) => (
                             <div key={c.id} className={contactStyles.contactContainer} onClick={() => setDetailId(c.id)}>
                                 <div className={contactStyles.contactName}>{c.name}</div>
