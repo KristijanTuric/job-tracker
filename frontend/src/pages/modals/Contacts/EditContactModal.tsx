@@ -1,10 +1,10 @@
 import { useState } from "react";
-import type { CreateContactRequest, UpdateContactRequest } from "../../../api/contacts";
+import type { LocalContact, UpdateContactRequest } from "../../../api/contacts";
 import styles from '../../../styles/modal.module.css';
 
 type Props = {
-    contact: CreateContactRequest;
-    onSubmit: (request: UpdateContactRequest) => Promise<void>;
+    contact: LocalContact;
+    onSubmit: (request: UpdateContactRequest) => void;
     onClose: () => void;
 };
 
@@ -14,6 +14,7 @@ export function EditContactModal({contact, onSubmit, onClose}: Props) {
     const [phone, setPhone] = useState(contact.phone ?? "");
     const [role, setRole] = useState(contact.role ?? "");
     const [notes, setNotes] = useState(contact.notes ?? "");
+
     const [error, setError] = useState<string | null>(null);
 
     async function handleSubmit(e: React.SubmitEvent) {
@@ -21,7 +22,7 @@ export function EditContactModal({contact, onSubmit, onClose}: Props) {
         setError(null);
 
         try {
-            await onSubmit({
+            onSubmit({
                 name,
                 email: email || null,
                 phone: phone || null,
@@ -29,7 +30,7 @@ export function EditContactModal({contact, onSubmit, onClose}: Props) {
                 notes: notes || null,
             });
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to update contact.");
+            setError(err instanceof Error ? err.message : "Failed to edit contact.");
         }
     }
 

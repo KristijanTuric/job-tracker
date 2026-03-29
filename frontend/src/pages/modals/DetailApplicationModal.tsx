@@ -3,7 +3,7 @@ import { formatStatus, type JobApplicationResponse } from "../../api/application
 import styles from '../../styles/modal.module.css';
 import contactStyles from '../../styles/contacts.module.css';
 import defaultStyles from '../../styles/defaults.module.css';
-import { deleteContact, listContacts, updateContact, type ContactResponse, type UpdateContactRequest } from "../../api/contacts";
+import { deleteContact, listContacts, updateContact, type ContactResponse, type LocalContact, type UpdateContactRequest } from "../../api/contacts";
 import { DataLoadingComponent } from "../../components/DataLoadingComponent";
 import { DetailContactModal } from "./Contacts/DetailContactModal";
 import { DeleteApplicationModal } from "./DeleteApplicationModal";
@@ -60,6 +60,18 @@ export function DetailApplicationModal({ application, onClose }: Props) {
         setDeleteId(null);
     }
 
+    function toLocalContact(c: ContactResponse): LocalContact {
+    return {
+        _id: 0,
+        serverId: c.id,
+        name: c.name,
+        email: c.email ?? null,
+        phone: c.phone ?? null,
+        role: c.role ?? null,
+        notes: c.notes ?? null,
+    };
+}
+
     return (
         <div className={styles.modalOverlay} onClick={onClose}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -109,7 +121,7 @@ export function DetailApplicationModal({ application, onClose }: Props) {
                     <button type="button" onClick={onClose} className={`${defaultStyles.defaultButton} ${defaultStyles.modalCancelButton}`}>Close</button>
                 </div>
                 {loading && <DataLoadingComponent></DataLoadingComponent>}
-                {detailId && <DetailContactModal contact={contacts.find((c) => c.id === detailId)!} onClose={() => setDetailId(null)}></DetailContactModal>}
+                {detailId && <DetailContactModal contact={toLocalContact(contacts.find((c) => c.id === detailId)!)} onClose={() => setDetailId(null)} />}
                 {deleteId && <DeleteApplicationModal onConfirm={handleDeleteContact} onClose={() => setDeleteId(null)}></DeleteApplicationModal>}
                 {editId && <UpdateContactModal contact={contacts.find((c) => c.id === editId)!} onClose={() => setEditId(null)} onSubmit={handleEditContact}></UpdateContactModal>}
             </div>

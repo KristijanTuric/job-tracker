@@ -1,9 +1,9 @@
-import type { ContactResponse } from "../../../api/contacts";
+import type { LocalContact } from "../../../api/contacts";
 import styles from '../../../styles/modal.module.css';
 import contactStyles from '../../../styles/contacts.module.css';
 
 type Props = {
-    contact: ContactResponse;
+    contact: LocalContact;
     onClose: () => void;
 };
 

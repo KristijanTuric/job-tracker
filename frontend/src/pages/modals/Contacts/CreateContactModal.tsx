@@ -3,7 +3,7 @@ import type { CreateContactRequest } from '../../../api/contacts';
 import styles from '../../../styles/modal.module.css';
 
 type Props = {
-    onSubmit: (request: CreateContactRequest) => Promise<void>;
+    onSubmit: (request: CreateContactRequest) => void;
     onClose: () => void;
 };
 
@@ -20,7 +20,7 @@ export function CreateContactModal({ onSubmit, onClose }: Props) {
         setError(null);
 
         try {
-            await onSubmit({
+            onSubmit({
                 name,
                 email: email || null,
                 phone: phone || null,

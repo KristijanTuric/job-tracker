@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { JobApplicationResponse, UpdateJobApplicationRequest } from "../../api/applications"
 import styles from '../../styles/modal.module.css';
 import createStyles from '../../styles/createApplication.module.css'
@@ -6,17 +6,16 @@ import defaultStyles from '../../styles/defaults.module.css';
 import contactStyles from '../../styles/contacts.module.css';
 import { CustomSelect } from "../../components/CustomSelect";
 import { CreateContactModal } from "./Contacts/CreateContactModal";
-import { deleteContact, listContacts, updateContact, type ContactResponse, type CreateContactRequest, type UpdateContactRequest } from "../../api/contacts";
+import { createContact, deleteContact, listContacts, updateContact, type CreateContactRequest, type LocalContact } from "../../api/contacts";
 import { NotePencilIcon, PlusCircleIcon, TrashIcon } from "@phosphor-icons/react";
 import { DataLoadingComponent } from "../../components/DataLoadingComponent";
 import { DetailContactModal } from "./Contacts/DetailContactModal";
-import { DeleteApplicationModal } from "./DeleteApplicationModal";
-import { UpdateContactModal } from "./Contacts/UpdateContactModal";
 import { EditContactModal } from "./Contacts/EditContactModal";
+import { DeleteModal } from "./DeleteModal";
 
 type Props = {
     application: JobApplicationResponse;
-    onSubmit: (request: UpdateJobApplicationRequest, contacts: CreateContactRequest[]) => Promise<void>;
+    onSubmit: (request: UpdateJobApplicationRequest) => Promise<void>;
     onClose: () => void;
 };
 
@@ -28,13 +27,17 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
     const [appliedOn, setAppliedOn] = useState(application.appliedOn ?? "");
     const [sourceUrl, setSourceUrl] = useState(application.sourceUrl ?? "");
     const [notes, setNotes] = useState(application.notes ?? "");
+
     const [showCreateContact, setShowCreateContact] = useState(false);
-    const [newContacts, setNewContacts] = useState<UpdateContactRequest[]>([]);
-    const [contacts, setContacts] = useState<ContactResponse[]>([]);
-    const [detailId, setDetailId] = useState<string | null>(null);
-    const [deleteId, setDeleteId] = useState<string | null>(null);
-    const [updateId, setUpdateId] = useState<string | null>(null);
-    const [editId, setEditId] = useState<string | null>(null);
+
+    const [contacts, setContacts] = useState<LocalContact[]>([]);
+    const originalContacts = useRef<LocalContact[]>([]);
+    const nextId = useRef(1);
+
+    const [detailId, setDetailId] = useState<number | null>(null);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [editId, setEditId] = useState<number | null>(null);
+
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -42,7 +45,17 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
             try {
                 setLoading(true);
                 const data = await listContacts(application.id);
-                setContacts(data);
+                const mapped: LocalContact[] = data.map((c) => ({
+                    _id: nextId.current++,
+                    serverId: c.id,
+                    name: c.name,
+                    email: c.email ?? null,
+                    phone: c.phone ?? null,
+                    role: c.role ?? null,
+                    notes: c.notes ?? null,
+                }));
+                setContacts(mapped);
+                originalContacts.current = mapped;
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to load contacts.");
             } finally {
@@ -51,43 +64,25 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
         })();
     }, []);
 
-    async function handleUpdateContact(request: UpdateContactRequest): Promise<void> {
-        if (!updateId) return;
-        const updated = await updateContact(application.id, updateId, request);
-        setContacts((prev) => prev.map((c) => c.id === updateId ? updated : c));
-        setUpdateId(null);
-    }
-    
-    async function handleDeleteContact(): Promise<void> {
-        if (!deleteId) return;
-        await deleteContact(application.id, deleteId);
-        setContacts((prev) => prev.filter((c) => c.id !== deleteId));
-        setDeleteId(null);
+    function handleAddContact(request: CreateContactRequest) {
+        setContacts((prev) => [...prev, { ...request, _id: nextId.current++, serverId: null}]);
+        setShowCreateContact(false);
     }
 
-    async function handleEditContact(request: UpdateContactRequest): Promise<void> {
+    function handleEditContact(updated: CreateContactRequest) {
         if (!editId) return;
-        const nextContacts = newContacts.map((c) => {
-            if (c.name === request.name) {
-                return request;
-            }
-            else 
-            {
-                return c;
-            }
-        });
-        setNewContacts(nextContacts);
-        
+        setContacts((prev) => prev.map((c) => c._id === editId ? { ...c, ...updated } : c));
         setEditId(null);
+    }
+
+    function handleDeleteContact() {
+        if (!deleteId) return;
+        setContacts((prev) => prev.filter((c) => c._id !== deleteId));
+        setDeleteId(null);
     }
 
     function showAddContactModal() {
         setShowCreateContact(true);
-    }
-
-    async function handleSaveContact(request: CreateContactRequest) {
-        setNewContacts((prev) => [...prev, request]);
-        setShowCreateContact(false);
     }
 
     async function handleSubmit(e: React.SubmitEvent) {
@@ -102,7 +97,41 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                 appliedOn: appliedOn || null,
                 sourceUrl: sourceUrl || null,
                 notes: notes || null,
-            }, newContacts);
+            });
+
+            const original = originalContacts.current;
+
+            // Firstly delete all original contacts that were deleted from contacts
+            const deleted = original.filter((o) => o.serverId && !contacts.some((c) => c.serverId === o.serverId));
+            for (const d of deleted) {
+                await deleteContact(application.id, d.serverId!);
+            }
+
+            // Then create the new contacts
+            const created = contacts.filter((c) => c.serverId === null);
+            for (const c of created) {
+                const { _id, serverId, ...request } = c;
+                await createContact(application.id, request);
+            }
+
+            const updated = contacts.filter((c) => {
+                if (!c.serverId) return false;
+                const orig = original.find((o) => o.serverId === c.serverId);
+                if (!orig) return false;
+                return (
+                    c.name !== orig.name ||
+                    c.email !== orig.email ||
+                    c.phone !== orig.phone ||
+                    c.role !== orig.role ||
+                    c.notes !== orig.notes
+                );
+            });
+            for (const u of updated) {
+                const { _id, serverId, ...request } = u;
+                await updateContact(application.id, serverId!, request);
+            }
+
+            onClose();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to update application.");
         }
@@ -152,28 +181,17 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                     <div className={createStyles.contactsContainer}>
                         <label>Contacts</label>
                         {contacts.map((c) => (
-                            <div key={c.id} className={contactStyles.contactContainer} onClick={() => setDetailId(c.id)}>
+                            <div key={c._id} className={contactStyles.contactContainer} onClick={() => setDetailId(c._id)}>
                                 <div className={contactStyles.contactName}>{c.name}</div>
                                 <div className={contactStyles.contactActions}>
-                                    <button type="button" onClick={ (e) => {e.stopPropagation(); setUpdateId(c.id) }} 
+                                    <button type="button" onClick={ (e) => {e.stopPropagation(); setEditId(c._id) }} 
                                         className={`${defaultStyles.iconButton} ${defaultStyles.editButton}`}><NotePencilIcon size={30}/></button>
-                                    <button type="button" onClick={ (e) => {e.stopPropagation(); setDeleteId(c.id)}} 
+                                    <button type="button" onClick={ (e) => {e.stopPropagation(); setDeleteId(c._id)}} 
                                         className={`${defaultStyles.iconButton} ${defaultStyles.deleteButton}`}><TrashIcon size={30} /></button>
                                 </div>                                
                             </div>
                         ))}
-                        {newContacts.map((c) => (
-                            <div key={c.name} className={contactStyles.contactContainer}>
-                                <div className={contactStyles.contactName}>{c.name}</div>
-                                 <div className={contactStyles.contactActions}>
-                                    <button className={`${defaultStyles.iconButton} ${defaultStyles.editButton}`} type="button" 
-                                    onClick={(e) => {e.stopPropagation(); setEditId(c.name)}}><NotePencilIcon size={30} /></button>
-                                    <button className={`${defaultStyles.iconButton} ${defaultStyles.deleteButton}`} type="button" 
-                                    onClick={() => setNewContacts((prev) => prev.filter((cont) => cont.name !== c.name))}><TrashIcon size={30} /></button>
-                                </div>
-                            </div>
-                        ))}
-                        {(contacts.length <= 0 && newContacts.length <= 0) && <div>-</div>}
+                        {contacts.length <= 0 && <div>-</div>}
                         <button type="button" onClick={showAddContactModal} className={`${defaultStyles.defaultButton} ${defaultStyles.contactAddButton}`}><PlusCircleIcon size={25} />Add Contact</button>
                     </div>
 
@@ -186,12 +204,11 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
             </div>
 
             {loading && <DataLoadingComponent></DataLoadingComponent>}   
-            {detailId && <DetailContactModal contact={contacts.find((c) => c.id === detailId)!} onClose={() => setDetailId(null)}></DetailContactModal>}
-            {deleteId && <DeleteApplicationModal onConfirm={handleDeleteContact} onClose={() => setDeleteId(null)}></DeleteApplicationModal>}
-            {updateId && <UpdateContactModal contact={contacts.find((c) => c.id === updateId)!} onClose={() => setUpdateId(null)} onSubmit={handleUpdateContact}></UpdateContactModal>}         
-            {editId && <EditContactModal contact={newContacts.find((c) => c.name === editId)!} onClose={() => setEditId(null)} onSubmit={handleEditContact}></EditContactModal>}
+            {detailId && <DetailContactModal contact={contacts.find((c) => c._id === detailId)!} onClose={() => setDetailId(null)}></DetailContactModal>}
+            {deleteId && <DeleteModal onConfirm={handleDeleteContact} onClose={() => setDeleteId(null)}></DeleteModal>}
+            {editId && <EditContactModal contact={contacts.find((c) => c._id === editId)!} onClose={() => setEditId(null)} onSubmit={handleEditContact}></EditContactModal>}
             { showCreateContact && (
-                <CreateContactModal onSubmit={handleSaveContact} onClose={() => setShowCreateContact(false)} />
+                <CreateContactModal onSubmit={handleAddContact} onClose={() => setShowCreateContact(false)} />
             )}
         </div>
     )

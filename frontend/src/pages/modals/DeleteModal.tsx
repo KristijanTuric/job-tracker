@@ -2,12 +2,11 @@ import styles from '../../styles/modal.module.css';
 import defaultStyles from '../../styles/defaults.module.css';
 
 type Props = {
-    onConfirm: () => Promise<void>;
+    onConfirm: () => void;
     onClose: () => void;
 };
 
-export function DeleteApplicationModal({ onConfirm, onClose }: Props) {
-
+export function DeleteModal({ onConfirm, onClose }: Props) {
     return (
         <div className={styles.modalOverlay} onClick={(e) => {
             e.stopPropagation();

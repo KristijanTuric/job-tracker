@@ -1,12 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { CreateJobApplicationRequest } from "../../api/applications"
 import styles from '../../styles/modal.module.css';
 import createStyles from '../../styles/createApplication.module.css'
 import defaultStyles from '../../styles/defaults.module.css';
-import { type CreateContactRequest } from "../../api/contacts";
+import contactStyles from '../../styles/contacts.module.css';
+import { type CreateContactRequest, type LocalContact } from "../../api/contacts";
 import { CreateContactModal } from "./Contacts/CreateContactModal";
 import { CustomSelect } from "../../components/CustomSelect";
-import { PlusCircleIcon, TrashIcon } from "@phosphor-icons/react";
+import { NotePencilIcon, PlusCircleIcon, TrashIcon } from "@phosphor-icons/react";
+import { EditContactModal } from "./Contacts/EditContactModal";
+import { DeleteModal } from "./DeleteModal";
+import { DetailContactModal } from "./Contacts/DetailContactModal";
 
 type Props = {
     onSubmit: (request: CreateJobApplicationRequest, contacts: CreateContactRequest[]) => Promise<void>;
@@ -20,8 +24,16 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
     const [appliedOn, setAppliedOn] = useState("");
     const [sourceUrl, setSourceUrl] = useState("");
     const [notes, setNotes] = useState("");
+
+    const [contacts, setContacts] = useState<LocalContact[]>([]);
+    const nextId = useRef(1);
+
     const [showCreateContact, setShowCreateContact] = useState(false);
-    const [contacts, setContacts] = useState<CreateContactRequest[]>([]);
+
+    const [editId, setEditId] = useState<number | null>(null);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
+    const [detailId, setDetailId] = useState<number | null>(null);
+    
     const [error, setError] = useState<string | null>(null);
     
     async function handleSubmit(e: React.SubmitEvent) {
@@ -29,6 +41,7 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
         setError(null);
 
         try {
+            const cleanContacts = contacts.map(({_id, serverId, ...rest}) => rest);
             await onSubmit({
                 companyName,
                 position,
@@ -36,19 +49,27 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                 appliedOn: appliedOn || null,
                 sourceUrl: sourceUrl || null,
                 notes: notes || null,
-            }, contacts);
+            }, cleanContacts);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Failed to create application.");
         }
     }
 
-    function showAddContactModal() {
-        setShowCreateContact(true);
+    function handleSaveContact(request: CreateContactRequest) {
+        setContacts((prev) => [...prev, { ...request, _id: nextId.current++, serverId: null }]);
+        setShowCreateContact(false);
     }
 
-    async function handleSaveContact(request: CreateContactRequest) {
-        setContacts((prev) => [...prev, request]);
-        setShowCreateContact(false);
+    function handleEditContact(request: CreateContactRequest): void {
+        if (!editId) return;
+        setContacts((prev) => prev.map((c) => c._id === editId ? {...request, _id: c._id, serverId: null } : c));
+        setEditId(null);
+    }
+
+    function handleDeleteContact(): void {
+        if (!deleteId) return;
+        setContacts((prev) => prev.filter((cont) => cont._id !== deleteId));
+        setDeleteId(null);
     }
 
     return (
@@ -74,7 +95,7 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                             {value: 2, label: "Interviewing"},
                             {value: 3, label: "Rejected"},
                             {value: 4, label: "Accepted"},
-                            {value: 5, label: "Archived"}]}></CustomSelect>
+                            {value: 5, label: "Archived"}]} />
                     </div>                                        
 
                     <div className={styles.formInput}>
@@ -95,12 +116,17 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                     <div className={createStyles.contactsContainer}>
                         <label>Contacts</label>
                         {contacts.map((c) => (
-                            <div className={createStyles.contactDisplay}>
-                                <div>{c.name}</div>
-                                <button className={defaultStyles.iconButton} type="button" onClick={() => setContacts((prev) => prev.filter((cont) => cont.name !== c.name))}><TrashIcon size={28} /></button>
+                            <div key={c._id} className={contactStyles.contactContainer} onClick={() => setDetailId(c._id)}>
+                                <div className={contactStyles.contactName}>{c.name}</div>
+                                <div className={contactStyles.contactActions}>
+                                    <button className={`${defaultStyles.iconButton} ${defaultStyles.editButton}`} type="button" 
+                                        onClick={(e) => {e.stopPropagation(); setEditId(c._id);}}><NotePencilIcon size={30} /></button>
+                                    <button className={`${defaultStyles.iconButton} ${defaultStyles.deleteButton}`} type="button" 
+                                        onClick={(e) => {e.stopPropagation(); setDeleteId(c._id);}}><TrashIcon size={30} /></button>
+                                </div>
                             </div>
                         ))}
-                        <button type="button" onClick={showAddContactModal} className={`${defaultStyles.defaultButton} ${defaultStyles.contactAddButton}`}><PlusCircleIcon size={25} />Add Contact</button>
+                        <button type="button" onClick={() => setShowCreateContact(true)} className={`${defaultStyles.defaultButton} ${defaultStyles.contactAddButton}`}><PlusCircleIcon size={25} />Add Contact</button>
                     </div>
                     <div className={styles.modalActions}>
                         <button type="button" onClick={onClose} className={`${defaultStyles.defaultButton} ${defaultStyles.modalCancelButton}`}>Cancel</button>
@@ -110,9 +136,10 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                 {error && <pre className="error">{error}</pre>}
             </div>
 
-            { showCreateContact && (
-                <CreateContactModal onSubmit={handleSaveContact} onClose={() => setShowCreateContact(false)} />
-            )}
+            { showCreateContact && <CreateContactModal onSubmit={handleSaveContact} onClose={() => setShowCreateContact(false)} /> }
+            {detailId && <DetailContactModal contact={contacts.find((c) => c._id === detailId)!} onClose={() => setDetailId(null)}></DetailContactModal>}
+            { editId && <EditContactModal contact={contacts.find((c) => c._id == editId)!} onSubmit={handleEditContact} onClose={() => setEditId(null)} /> }
+            { deleteId && <DeleteModal onConfirm={handleDeleteContact} onClose={() => setDeleteId(null)}/> }
         </div>
     )
 }

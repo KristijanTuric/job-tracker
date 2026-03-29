@@ -26,6 +26,16 @@ export type ContactResponse = {
     notes: string | null;
 }
 
+export interface LocalContact {
+    _id: number;
+    serverId: string | null;
+    name: string;
+    email: string | null;
+    phone: string | null;
+    role: string | null;
+    notes: string | null;
+}
+
 export async function listContacts(jobApplicationId: string): Promise<ContactResponse[]> {
     return ( await apiFetch(`api/applications/${jobApplicationId}/contacts`)) as ContactResponse[];
 }
