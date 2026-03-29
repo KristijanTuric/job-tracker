@@ -68,10 +68,15 @@ export function ApplicationsListPage() {
         setDeleteId(null);
     }
 
-    async function handleUpdate(request: UpdateJobApplicationRequest) {
+    async function handleUpdate(request: UpdateJobApplicationRequest, contacts: CreateContactRequest[]) {
         if (!updateId) return;
         const updated = await updateApplication(updateId, request);
         setApps((prev) => prev.map((a) => a.id === updateId ? updated : a));
+
+        for (var contact of contacts) {
+            await createContact(updated.id, contact);
+        }
+
         setUpdateId(null);
     }
 

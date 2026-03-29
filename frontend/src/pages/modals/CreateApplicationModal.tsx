@@ -75,15 +75,6 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                             {value: 3, label: "Rejected"},
                             {value: 4, label: "Accepted"},
                             {value: 5, label: "Archived"}]}></CustomSelect>
-                            
-                        {/* <select value={status} onChange={(e) => setStatus(Number(e.target.value))}>
-                            <option value={0}>Not Applied</option>
-                            <option value={1}>Applied</option>
-                            <option value={2}>Interviewing</option>
-                            <option value={3}>Rejected</option>
-                            <option value={4}>Accepted</option>
-                            <option value={5}>Archived</option>
-                        </select> */}
                     </div>                                        
 
                     <div className={styles.formInput}>
