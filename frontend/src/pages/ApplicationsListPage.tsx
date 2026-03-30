@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createApplication, deleteApplication, formatStatus, listApplications, updateApplication } from "../api/applications";
 import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobApplicationRequest } from "../api/applications";
 import { useNavigate } from "react-router-dom";
@@ -14,11 +14,15 @@ import { ChatsIcon, CheckCircleIcon, CircleIcon, NotePencilIcon, PaperPlaneTiltI
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
+    const [shownApps, setShownApps] = useState<JobApplicationResponse[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [updateId, setUpdateId] = useState<string | null>(null);
     const [detailId, setDetailId] = useState<string | null>(null);
+
+    const lastStatus = useRef(-1);
+
     const nav = useNavigate();
 
     useEffect(() => {
@@ -26,6 +30,7 @@ export function ApplicationsListPage() {
             try {
                 const data = await listApplications();
                 setApps(data);
+                setShownApps(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Failed to load applications");
             }
@@ -52,26 +57,51 @@ export function ApplicationsListPage() {
 
     async function handleCreate(request: CreateJobApplicationRequest, contacts: CreateContactRequest[]) {
         const created = await createApplication(request);
-        setApps((prev) => [...prev, created]);
+        const updated = [...apps, created];
+        setApps(updated);
 
         for (var contact of contacts) {
             await createContact(created.id, contact);
         }
 
+        refreshApplications(updated);
         setShowModal(false);
     }
 
     async function handleDelete() {
         if (!deleteId) return;
         await deleteApplication(deleteId);
-        setApps((prev) => prev.filter((a) => a.id !== deleteId));
+        const updated = apps.filter((a) => a.id !== deleteId);
+        setApps(updated);
+        refreshApplications(updated);
         setDeleteId(null);
     }
 
     async function handleUpdate(request: UpdateJobApplicationRequest) {
         if (!updateId) return;
         const updated = await updateApplication(updateId, request);
-        setApps((prev) => prev.map((a) => a.id === updateId ? updated : a));
+        const updatedApps = apps.map((a) => a.id === updateId ? updated : a);
+        setApps(updatedApps);
+        refreshApplications(updatedApps);
+        setUpdateId(null);
+    }
+
+    function handleFiltering(query: number) {
+        if (lastStatus.current === query) {
+            setShownApps(apps);
+            lastStatus.current = -1;
+        } else {
+            setShownApps(query === null ? apps : apps.filter((a) => a.status === query));
+            lastStatus.current = query;
+        }
+    }
+
+    function refreshApplications(updatedApps: JobApplicationResponse[]) {
+        if (lastStatus.current !== -1) {
+            setShownApps(updatedApps.filter((a) => a.status === lastStatus.current));
+        } else {
+            setShownApps(updatedApps);
+        }
     }
 
     return (
@@ -88,23 +118,28 @@ export function ApplicationsListPage() {
             {error && <pre className="error">{error}</pre>}
 
             <div className={styles.statsContainer}>
-                <div className={`${styles.statsElement} ${styles.notApplied}`}>            
+                <div className={`${styles.statsElement} ${styles.notApplied} ${lastStatus.current === 0 ? styles.statSelected : ""}`} 
+                    onClick={() => handleFiltering(0)}>            
                     <span>Not Applied</span>
                     <strong>{stats.notApplied} <CircleIcon fontWeight={"bold"} size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.applied}`}>
+                <div className={`${styles.statsElement} ${styles.applied} ${lastStatus.current === 1 ? styles.statSelected : ""}`} 
+                    onClick={() => handleFiltering(1)}>
                     <span>Applied</span>
                     <strong>{stats.applied} <PaperPlaneTiltIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.interviewing}`}>
+                <div className={`${styles.statsElement} ${styles.interviewing} ${lastStatus.current === 2 ? styles.statSelected : ""}`} 
+                    onClick={() => handleFiltering(2)}>
                     <span>Interviewing</span>
                     <strong>{stats.interviewing} <ChatsIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.rejected}`}>
+                <div className={`${styles.statsElement} ${styles.rejected} ${lastStatus.current === 3 ? styles.statSelected : ""}`} 
+                    onClick={() => handleFiltering(3)}>
                     <span>Rejected</span>
                     <strong>{stats.rejected} <XCircleIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.accepted}`}>
+                <div className={`${styles.statsElement} ${styles.accepted} ${lastStatus.current === 4 ? styles.statSelected : ""}`} 
+                    onClick={() => handleFiltering(4)}>
                     <span>Accepted</span>
                     <strong>{stats.accepted} <CheckCircleIcon size={30} /></strong>
                 </div>
@@ -122,7 +157,7 @@ export function ApplicationsListPage() {
                     </tr>
                 </thead>
                 <tbody>
-                    {apps.map((a) => (
+                    {shownApps.map((a) => (
                         <tr key={a.id} onClick={() => setDetailId(a.id)}>
                             <td>{a.companyName}</td>
                             <td>{a.position}</td>

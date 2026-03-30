@@ -88,6 +88,7 @@
     padding: 16px 24px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     flex: 1;
+    user-select: none;
 }
 
 .statsElement {
@@ -96,6 +97,8 @@
     padding: 16px 24px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     flex: 1;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .statsElement span {
@@ -122,9 +125,17 @@
     color: #374151;
 }
 
+.notApplied:hover {
+    background-color: #e8edf7;
+}
+
 .applied {
     background-color: #dbeafe;
     color: #1e40af;
+}
+
+.applied:hover {
+    background-color: #cae0fd;
 }
 
 .interviewing {
@@ -132,14 +143,30 @@
     color: #92400e;
 }
 
+.interviewing:hover {
+    background-color: #faecb4;
+}
+
 .rejected {
     background-color: #fee2e2;
     color: #991b1b;
 }
 
+.rejected:hover {
+    background-color: #fac9c9;
+}
+
 .accepted {
     background-color: #dcfce7;
     color: #166534;
+}
+
+.accepted:hover {
+    background-color: #c5f8d7;
+}
+
+.statSelected {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .emptyApplications {
