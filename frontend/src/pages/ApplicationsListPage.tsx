@@ -10,7 +10,7 @@ import { DeleteApplicationModal } from "./modals/DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
 import { DetailApplicationModal } from "./modals/DetailApplicationModal";
 import { createContact, type CreateContactRequest } from "../api/contacts";
-import { NotePencilIcon, PlusCircleIcon, SignOutIcon, TrashIcon } from "@phosphor-icons/react";
+import { ChatsIcon, CheckCircleIcon, CircleIcon, NotePencilIcon, PaperPlaneTiltIcon, PlusCircleIcon, SignOutIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
@@ -88,25 +88,25 @@ export function ApplicationsListPage() {
             {error && <pre className="error">{error}</pre>}
 
             <div className={styles.statsContainer}>
-                <div className={`${styles.statsElement} ${styles.notApplied}`}>
+                <div className={`${styles.statsElement} ${styles.notApplied}`}>            
                     <span>Not Applied</span>
-                    <strong>{stats.notApplied}</strong>
+                    <strong>{stats.notApplied} <CircleIcon fontWeight={"bold"} size={30} /></strong>
                 </div>
                 <div className={`${styles.statsElement} ${styles.applied}`}>
                     <span>Applied</span>
-                    <strong>{stats.applied}</strong>
+                    <strong>{stats.applied} <PaperPlaneTiltIcon size={30} /></strong>
                 </div>
                 <div className={`${styles.statsElement} ${styles.interviewing}`}>
                     <span>Interviewing</span>
-                    <strong>{stats.interviewing}</strong>
+                    <strong>{stats.interviewing} <ChatsIcon size={30} /></strong>
                 </div>
                 <div className={`${styles.statsElement} ${styles.rejected}`}>
                     <span>Rejected</span>
-                    <strong>{stats.rejected}</strong>
+                    <strong>{stats.rejected} <XCircleIcon size={30} /></strong>
                 </div>
                 <div className={`${styles.statsElement} ${styles.accepted}`}>
                     <span>Accepted</span>
-                    <strong>{stats.accepted}</strong>
+                    <strong>{stats.accepted} <CheckCircleIcon size={30} /></strong>
                 </div>
             </div>
 

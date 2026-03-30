@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import style from '../styles/components/customSelect.module.css';
 import { CaretCircleDownIcon } from "@phosphor-icons/react";
 
 interface Option {
     value: number;
     label: string;
+    icon?: ReactNode;
 }
 
 export function CustomSelect({ options, value, onChange }: {
@@ -34,13 +35,13 @@ export function CustomSelect({ options, value, onChange }: {
     return (
         <div className={style.wrapper} ref={wrapperRef}>
             <button type="button" className={style.trigger} onClick={() => {setOpen(!open); setArrowStyle(open ? style.rotateBackArrow : style.rotatingArrow)}}>
-                <p>{selected?.label ?? "Select..."}</p>
+                <p className={style.triggerLabel}>{selected?.icon} {selected?.label ?? "Select..."}</p>
                 <CaretCircleDownIcon size={28} className={arrowStyle}/>
             </button>
             {open && (
                 <ul className={style.dropdown}>
                     {options.map((o) => (
-                        <li key={o.value} className={style.option} onClick={() => { onChange(o.value); setOpen(false); setArrowStyle(style.rotateBackArrow); }}>{o.label}</li>
+                        <li key={o.value} className={style.option} onClick={() => { onChange(o.value); setOpen(false); setArrowStyle(style.rotateBackArrow); }}>{o.icon} {o.label}</li>                        
                     ))}
                 </ul>
             )}

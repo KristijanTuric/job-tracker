@@ -7,7 +7,7 @@ import contactStyles from '../../styles/contacts.module.css';
 import { type CreateContactRequest, type LocalContact } from "../../api/contacts";
 import { CreateContactModal } from "./Contacts/CreateContactModal";
 import { CustomSelect } from "../../components/CustomSelect";
-import { NotePencilIcon, PlusCircleIcon, TrashIcon } from "@phosphor-icons/react";
+import { ArchiveBoxIcon, ChatsIcon, CheckCircleIcon, CircleIcon, NotePencilIcon, PaperPlaneTiltIcon, PlusCircleIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
 import { EditContactModal } from "./Contacts/EditContactModal";
 import { DeleteModal } from "./DeleteModal";
 import { DetailContactModal } from "./Contacts/DetailContactModal";
@@ -90,12 +90,12 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
                     <div className={styles.formInput}>
                         <label>Status</label>
                         <CustomSelect value={status} onChange={(e) => setStatus(e)} options={[
-                            {value: 0, label: "Not Applied"}, 
-                            {value: 1, label: "Applied"},
-                            {value: 2, label: "Interviewing"},
-                            {value: 3, label: "Rejected"},
-                            {value: 4, label: "Accepted"},
-                            {value: 5, label: "Archived"}]} />
+                            {value: 0, label: "Not Applied", icon: <CircleIcon size={18} />}, 
+                            {value: 1, label: "Applied", icon: <PaperPlaneTiltIcon size={18} />},
+                            {value: 2, label: "Interviewing", icon: <ChatsIcon size={18} />},
+                            {value: 3, label: "Rejected", icon: <XCircleIcon size={18} />},
+                            {value: 4, label: "Accepted", icon: <CheckCircleIcon size={18} />},
+                            {value: 5, label: "Archived", icon: <ArchiveBoxIcon size={18} />}]} />
                     </div>                                        
 
                     <div className={styles.formInput}>

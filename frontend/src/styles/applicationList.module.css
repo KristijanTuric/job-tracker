@@ -110,6 +110,9 @@
 .statsElement strong {
     font-size: 1.5rem;
     color: #1f2937;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* Softer status bar colors */
