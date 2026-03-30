@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ContactResponse, UpdateContactRequest } from "../../../api/contacts";
 import styles from '../../../styles/modal.module.css';
+import defaultStyles from '../../../styles/defaults.module.css';
 
 type Props = {
     contact: ContactResponse;
@@ -41,29 +42,34 @@ export function UpdateContactModal({contact, onSubmit, onClose}: Props) {
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                 <h2>Update Contact</h2>
                 <form onSubmit={handleSubmit} className={styles.modalForm}>
-                    <label>
-                        Name
+                    <div className={styles.formInput}>
+                        <label>Name</label>
                         <input value={name} onChange={(e) => setName(e.target.value)} required />
-                    </label>
-                    <label>
-                        Email
+                    </div>
+
+                    <div className={styles.formInput}>
+                        <label>Email</label>
                         <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
-                    </label>
-                    <label>
-                        Phone
+                    </div>
+
+                    <div className={styles.formInput}>
+                        <label>Phone</label>
                         <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" />
-                    </label>
-                    <label>
-                        Role
+                    </div>
+
+                    <div className={styles.formInput}>
+                        <label>Role</label>
                         <input value={role} onChange={(e) => setRole(e.target.value)} />
-                    </label>
-                    <label>
-                        Notes
+                    </div>
+
+                    <div className={styles.formInput}>
+                        <label>Role</label>
                         <textarea value={notes} onChange={(e) => setNotes(e.target.value)} />
-                    </label>
+                    </div>
+
                      <div className={styles.modalActions}>
-                        <button type="button" onClick={onClose}>Cancel</button>
-                        <button type="submit">Save</button>
+                        <button type="button" onClick={onClose} className={`${defaultStyles.defaultButton} ${defaultStyles.modalCancelButton}`}>Cancel</button>
+                        <button type="submit" className={`${defaultStyles.defaultButton} ${defaultStyles.modalConfirmButton}`}>Save</button>
                     </div>
                 </form>
                 {error && <pre className="error">{error}</pre>}
