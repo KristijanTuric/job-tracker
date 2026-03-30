@@ -44,7 +44,7 @@ export function UpdateContactModal({contact, onSubmit, onClose}: Props) {
                 <form onSubmit={handleSubmit} className={styles.modalForm}>
                     <div className={styles.formInput}>
                         <label>Name</label>
-                        <input value={name} onChange={(e) => setName(e.target.value)} required />
+                        <input autoFocus value={name} onChange={(e) => setName(e.target.value)} required />
                     </div>
 
                     <div className={styles.formInput}>

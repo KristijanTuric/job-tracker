@@ -144,7 +144,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                 <form onSubmit={handleSubmit} className={styles.modalForm}>                       
                     <div className={styles.formInput}>
                         <label>Company</label>            
-                        <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />                
+                        <input autoFocus value={companyName} onChange={(e) => setCompanyName(e.target.value)} required />                
                     </div> 
 
                     <div className={styles.formInput}>

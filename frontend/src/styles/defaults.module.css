@@ -64,7 +64,15 @@
     background-color: lightcyan;
 }
 
+.contactAddButton:focus {
+    background-color: lightcyan;
+}
+
 .modalConfirmButton:hover {
+    background-color: rgb(181, 250, 181);
+}
+
+.modalConfirmButton:focus {
     background-color: rgb(181, 250, 181);
 }
 
@@ -72,10 +80,23 @@
     background-color: rgb(252, 169, 164);
 }
 
+.modalCancelButton:focus {
+    background-color: rgb(252, 169, 164);
+}
+
+
 .editButton:hover {
     background-color: aquamarine;
 }
 
+.editButton:focus {
+    background-color: aquamarine;
+}
+
 .deleteButton:hover {
+    background-color: lightcoral;
+}
+
+.deleteButton:focus {
     background-color: lightcoral;
 }
