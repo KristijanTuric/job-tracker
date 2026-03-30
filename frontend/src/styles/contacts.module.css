@@ -46,18 +46,41 @@
 
 .contactNotes {
     white-space: pre-wrap;
+    padding: 5px 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+.contactNotes:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.48);
 }
 
 .contactInfo {
     color: #0969da;
     text-decoration: none;
+    padding: 5px 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
 }
 
 .contactInfo:hover {
-    text-decoration: underline;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.48);
 }
 
 .emptyInfo {
     color: black;
     text-decoration: none;
+    padding: 5px 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+.emptyInfo:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.48);
 }
