@@ -29,6 +29,7 @@ export function LoginPage() {
     return (
         <div className={styles.rootContainer}>
             <div className={styles.pageContainer}>
+                <Link className={styles.homeLink} to={"/"}>Home</Link>
                 <h1>Login</h1>
                 <form className={styles.loginForm} onSubmit={onSubmit}>                    
                     <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />

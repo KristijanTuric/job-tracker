@@ -29,6 +29,7 @@ export function RegisterPage() {
     return (
         <div className={styles.rootContainer}>
             <div className={styles.pageContainer}>
+                <Link className={styles.homeLink} to={"/"}>Home</Link>
                 <h1>Register</h1>
                 <form onSubmit={onSubmit} className={styles.registerForm}>                    
                     <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email"/>
