@@ -31,7 +31,7 @@ export function RegisterPage() {
             <div className={styles.pageContainer}>
                 <h1>Register</h1>
                 <form onSubmit={onSubmit} className={styles.registerForm}>                    
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email"/>
+                    <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email"/>
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password"/>
                     {error && <pre className="error">{error}</pre>}
                     <button type="submit">Register</button>

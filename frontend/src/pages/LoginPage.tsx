@@ -31,8 +31,8 @@ export function LoginPage() {
             <div className={styles.pageContainer}>
                 <h1>Login</h1>
                 <form className={styles.loginForm} onSubmit={onSubmit}>                    
-                    <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" autoComplete="off" />
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" autoComplete="off" />
+                    <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Email" />
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" />
                     {error && <pre className="error">{error}</pre>}
                     <button type="submit">LOGIN</button>
                 </form>
