@@ -5,15 +5,14 @@ import { LoginPage } from './pages/LoginPage.tsx'
 import { RequireAuth } from './auth/RequireAuth.tsx'
 import { ApplicationsListPage } from './pages/ApplicationsListPage.tsx'
 import { RegisterPage } from './pages/RegisterPage.tsx'
+import { HomePage } from './pages/HomePage.tsx'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route element={<RequireAuth />}>
-          <Route path="/" element={<ApplicationsListPage />}/>
-        </Route>
+      <Routes>        
+        <Route path="/" element={<HomePage />}/>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<RequireAuth />}>
