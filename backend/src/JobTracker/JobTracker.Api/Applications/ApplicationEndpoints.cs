@@ -1,8 +1,12 @@
-﻿using JobTracker.Api.Auth;
+﻿using CsvHelper;
+using JobTracker.Api.Auth;
 using JobTracker.Api.Contacts;
 using JobTracker.Domain.Entities;
 using JobTracker.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JobTracker.Api.Applications;
 
@@ -27,6 +31,27 @@ public static class ApplicationEndpoints
 
             return Results.Ok(apps);
         }).WithName("ListApplications");
+
+        group.MapGet("/export", async (AppDbContext db, HttpContext http) =>
+        {
+            var userId = http.User.GetUserId();
+
+            var apps = await db.JobApplications
+            .Where(x => x.OwnerId == userId)
+            .OrderByDescending(x => x.UpdateAtUtc)
+            .ToListAsync();
+
+            using var memoryStream = new MemoryStream();
+            using var writer = new StreamWriter(memoryStream, System.Text.Encoding.UTF8);
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            csv.Context.RegisterClassMap<ApplicationCsvMap>();
+            csv.WriteRecords(apps);
+
+            writer.Flush();
+
+            return Results.File(memoryStream.ToArray(), "text/csv", "applications.csv");
+        }).WithName("ExportApplications");
 
         // GET job application by id, if owned by current user
         group.MapGet("/{id:guid}", async (Guid id, AppDbContext db, HttpContext http) =>

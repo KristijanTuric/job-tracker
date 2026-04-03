@@ -1,4 +1,4 @@
-import { apiFetch } from "./http";
+import { apiFetch, getAccessToken } from "./http";
 
 export type ApplicationStatus = "Not Applied" | "Applied" | "Interviewing" | "Rejected" | "Accepted" | "Archived";
 
@@ -69,4 +69,33 @@ export async function deleteApplication(id: string): Promise<void> {
     return (await apiFetch(`/api/applications/${id}`, {
         method: "DELETE",
     }));
+}
+
+export async function exportApplications(): Promise<void> {
+    const token = getAccessToken();
+
+    const response = await fetch("/api/applications/export", {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to export applications.");
+    }
+
+    const blob = await response.blob();
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "applications.csv";
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }

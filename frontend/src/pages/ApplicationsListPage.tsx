@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { createApplication, deleteApplication, formatStatus, listApplications, updateApplication } from "../api/applications";
+import { createApplication, deleteApplication, exportApplications, formatStatus, listApplications, updateApplication } from "../api/applications";
 import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobApplicationRequest } from "../api/applications";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
@@ -10,7 +10,7 @@ import { DeleteApplicationModal } from "./modals/DeleteApplicationModal";
 import { UpdateApplicationModal } from "./modals/UpdateApplicationModal";
 import { DetailApplicationModal } from "./modals/DetailApplicationModal";
 import { createContact, type CreateContactRequest } from "../api/contacts";
-import { ChatsIcon, CheckCircleIcon, CircleIcon, NotePencilIcon, PaperPlaneTiltIcon, PlusCircleIcon, SignOutIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
+import { ChatsIcon, CheckCircleIcon, CircleIcon, DownloadIcon, NotePencilIcon, PaperPlaneTiltIcon, PlusCircleIcon, SignOutIcon, TrashIcon, XCircleIcon } from "@phosphor-icons/react";
 
 export function ApplicationsListPage() {
     const [apps, setApps] = useState<JobApplicationResponse[]>([]);
@@ -86,6 +86,14 @@ export function ApplicationsListPage() {
         setUpdateId(null);
     }
 
+    async function exportApps() {
+        try {
+            await exportApplications();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Failed to export applications");
+        }
+    }
+
     function handleFiltering(query: number) {
         if (lastStatus.current === query) {
             setShownApps(apps);
@@ -111,6 +119,7 @@ export function ApplicationsListPage() {
                 <h1>Your Applications</h1>
                 <div className={styles.actions}>
                     <button className={`${defaultStyles.iconTextButton}`} onClick={() => setShowModal(true)}><PlusCircleIcon size={32} /> Add Application</button>
+                    <button className={`${defaultStyles.iconTextButton}`} onClick={exportApps}><DownloadIcon size={32} /> Export Applications</button>
                     <button className={`${defaultStyles.deleteButton} ${defaultStyles.iconButton}`} onClick={handleLogout}><SignOutIcon size={32} /></button>
                 </div>
             </div>
