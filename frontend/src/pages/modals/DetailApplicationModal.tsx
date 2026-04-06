@@ -33,18 +33,18 @@ export function DetailApplicationModal({ application, onClose }: Props) {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-            (async () => {
-                try {
-                    setLoading(true);
-                    const data = await listContacts(application.id);
-                    setContacts(data);
-                } catch (err) {
-                    setError(err instanceof Error ? err.message : "Failed to load contacts.");
-                } finally {
-                    setLoading(false);
-                }
-            })();
-        }, []);
+        (async () => {
+            try {
+                setLoading(true);
+                const data = await listContacts(application.id);
+                setContacts(data);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "Failed to load contacts.");
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, [application.id]);
 
     async function handleEditContact(request: UpdateContactRequest): Promise<void> {
         if (!editId) return;

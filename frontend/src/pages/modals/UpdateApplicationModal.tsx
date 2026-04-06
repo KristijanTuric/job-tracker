@@ -62,7 +62,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                 setLoading(false);
             }
         })();
-    }, []);
+    }, [application.id]);
 
     function handleAddContact(request: CreateContactRequest) {
         setContacts((prev) => [...prev, { ...request, _id: nextId.current++, serverId: null}]);
