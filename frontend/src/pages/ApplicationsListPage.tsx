@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createApplication, deleteApplication, exportApplications, formatStatus, listApplications, updateApplication } from "../api/applications";
 import type { CreateJobApplicationRequest, JobApplicationResponse, UpdateJobApplicationRequest } from "../api/applications";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,8 @@ export function ApplicationsListPage() {
     const [updateId, setUpdateId] = useState<string | null>(null);
     const [detailId, setDetailId] = useState<string | null>(null);
 
-    const lastStatus = useRef(-1);
+    //const lastStatus = useRef(-1);
+    const [lastStatus, setLastStatus] = useState(-1);
 
     const nav = useNavigate();
 
@@ -95,18 +96,18 @@ export function ApplicationsListPage() {
     }
 
     function handleFiltering(query: number) {
-        if (lastStatus.current === query) {
+        if (lastStatus === query) {
             setShownApps(apps);
-            lastStatus.current = -1;
+            setLastStatus(-1);
         } else {
             setShownApps(query === null ? apps : apps.filter((a) => a.status === query));
-            lastStatus.current = query;
+            setLastStatus(query);
         }
     }
 
     function refreshApplications(updatedApps: JobApplicationResponse[]) {
-        if (lastStatus.current !== -1) {
-            setShownApps(updatedApps.filter((a) => a.status === lastStatus.current));
+        if (lastStatus !== -1) {
+            setShownApps(updatedApps.filter((a) => a.status === lastStatus));
         } else {
             setShownApps(updatedApps);
         }
@@ -127,27 +128,27 @@ export function ApplicationsListPage() {
             {error && <pre className="error">{error}</pre>}
 
             <div className={styles.statsContainer}>
-                <div className={`${styles.statsElement} ${styles.notApplied} ${lastStatus.current === 0 ? styles.statSelected : ""}`} 
+                <div className={`${styles.statsElement} ${styles.notApplied} ${lastStatus === 0 ? styles.statSelected : ""}`} 
                     onClick={() => handleFiltering(0)}>            
                     <span>Not Applied</span>
                     <strong>{stats.notApplied} <CircleIcon fontWeight={"bold"} size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.applied} ${lastStatus.current === 1 ? styles.statSelected : ""}`} 
+                <div className={`${styles.statsElement} ${styles.applied} ${lastStatus === 1 ? styles.statSelected : ""}`} 
                     onClick={() => handleFiltering(1)}>
                     <span>Applied</span>
                     <strong>{stats.applied} <PaperPlaneTiltIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.interviewing} ${lastStatus.current === 2 ? styles.statSelected : ""}`} 
+                <div className={`${styles.statsElement} ${styles.interviewing} ${lastStatus === 2 ? styles.statSelected : ""}`} 
                     onClick={() => handleFiltering(2)}>
                     <span>Interviewing</span>
                     <strong>{stats.interviewing} <ChatsIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.rejected} ${lastStatus.current === 3 ? styles.statSelected : ""}`} 
+                <div className={`${styles.statsElement} ${styles.rejected} ${lastStatus === 3 ? styles.statSelected : ""}`} 
                     onClick={() => handleFiltering(3)}>
                     <span>Rejected</span>
                     <strong>{stats.rejected} <XCircleIcon size={30} /></strong>
                 </div>
-                <div className={`${styles.statsElement} ${styles.accepted} ${lastStatus.current === 4 ? styles.statSelected : ""}`} 
+                <div className={`${styles.statsElement} ${styles.accepted} ${lastStatus === 4 ? styles.statSelected : ""}`} 
                     onClick={() => handleFiltering(4)}>
                     <span>Accepted</span>
                     <strong>{stats.accepted} <CheckCircleIcon size={30} /></strong>
