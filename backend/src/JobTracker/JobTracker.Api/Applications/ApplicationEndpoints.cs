@@ -5,8 +5,6 @@ using JobTracker.Domain.Entities;
 using JobTracker.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
 
 namespace JobTracker.Api.Applications;
 
@@ -17,6 +15,8 @@ public static class ApplicationEndpoints
         var group = app.MapGroup("/applications")
             .RequireAuthorization()
             .WithTags("Applications");
+
+        #region Application Endpoints
 
         // List current users job applications
         group.MapGet("/", async (AppDbContext db, HttpContext http) =>
@@ -135,6 +135,8 @@ public static class ApplicationEndpoints
             return Results.NoContent();
 
         }).WithName("DeleteApplication");
+
+        #endregion
 
         #region Contacts Endpoints
 
