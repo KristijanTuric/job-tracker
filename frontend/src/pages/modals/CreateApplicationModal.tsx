@@ -41,7 +41,7 @@ export function CreateApplicationModal({ onSubmit, onClose }: Props) {
         setError(null);
 
         try {
-            const cleanContacts = contacts.map(({_id, serverId, ...rest}) => rest);
+            const cleanContacts = contacts.map(({_id: _, serverId: _s, ...rest}) => rest);
             await onSubmit({
                 companyName,
                 position,

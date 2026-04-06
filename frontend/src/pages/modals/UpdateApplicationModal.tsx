@@ -110,7 +110,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
             // Then create the new contacts
             const created = contacts.filter((c) => c.serverId === null);
             for (const c of created) {
-                const { _id, serverId, ...request } = c;
+                const { _id: _, serverId: _s, ...request } = c;
                 await createContact(application.id, request);
             }
 
@@ -127,7 +127,7 @@ export function UpdateApplicationModal({ application, onSubmit, onClose }: Props
                 );
             });
             for (const u of updated) {
-                const { _id, serverId, ...request } = u;
+                const { _id: _, serverId, ...request } = u;
                 await updateContact(application.id, serverId!, request);
             }
 

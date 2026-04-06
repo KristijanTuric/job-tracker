@@ -60,7 +60,7 @@ export function ApplicationsListPage() {
         const updated = [...apps, created];
         setApps(updated);
 
-        for (var contact of contacts) {
+        for (let contact of contacts) {
             await createContact(created.id, contact);
         }
 
