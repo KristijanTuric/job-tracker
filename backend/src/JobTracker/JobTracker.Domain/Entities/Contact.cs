@@ -10,5 +10,5 @@ public sealed class Contact
     public string? Role { get; set; }
     public string? Notes { get; set; }
 
-    public required JobApplication JobApplication { get; set; }  // Navigation property
+    public JobApplication JobApplication { get; set; } = null!;
 }
